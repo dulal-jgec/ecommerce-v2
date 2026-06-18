@@ -15,7 +15,7 @@ const ProductCard = ({ product }) => {
         <img
           src={
             product.images?.length > 0
-              ? `http://localhost:5454${product.images[0].imageUrl}`
+              ? `https://ecommerce-v2-backend-g92n.onrender.com${product.images[0].imageUrl}`
               : "/placeholder.jpg"
           }
           alt={product.name}

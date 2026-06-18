@@ -46,7 +46,7 @@ const OrderSummary = ({ address, shippingMethod, onNext, onBack }) => {
             >
               <div className="w-20 h-20 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0">
                 <img
-                  src={`http://localhost:5454${item.imageUrl}`}
+                  src={`https://ecommerce-v2-backend-g92n.onrender.com${item.imageUrl}`}
                   alt={item.productName}
                   className="w-full h-full object-cover"
                 />

@@ -35,7 +35,7 @@ const HomeCard = ({ product, onQuickView, onAddToCart }) => {
         <img
           src={
             product.images?.[0]?.imageUrl
-              ? `http://localhost:5454${product.images[0].imageUrl}`
+              ? `https://ecommerce-v2-backend-g92n.onrender.com${product.images[0].imageUrl}`
               : "https://via.placeholder.com/400"
           }
           alt={product.name}

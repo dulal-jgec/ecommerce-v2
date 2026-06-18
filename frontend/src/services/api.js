@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5454/api/v1",
+  baseURL: "https://ecommerce-v2-backend-g92n.onrender.com/api/v1",
 });
 
 api.interceptors.request.use((config) => {
@@ -31,7 +31,7 @@ api.interceptors.response.use(
           localStorage.getItem("refreshToken");
 
         const response = await axios.post(
-          "http://localhost:5454/api/v1/auth/refresh",
+          "https://ecommerce-v2-backend-g92n.onrender.com/api/v1/auth/refresh",
           {
             refreshToken,
           }

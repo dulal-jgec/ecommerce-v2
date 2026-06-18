@@ -52,7 +52,7 @@ const SellerOrderDetails = () => {
 
       <div className="bg-white rounded-lg shadow p-6">
         <img
-          src={`http://localhost:5454${order.imageUrl}`}
+          src={`https://ecommerce-v2-backend-g92n.onrender.com${order.imageUrl}`}
           alt={order.productName}
           className="w-48 h-48 object-cover rounded mb-5"
         />

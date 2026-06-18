@@ -6,9 +6,9 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
 
   // Robust image handling
   const imageUrl = item?.selectedImage
-    ? `http://localhost:5454${item.selectedImage}`
+    ? `https://ecommerce-v2-backend-g92n.onrender.com${item.selectedImage}`
     : item?.imageUrl
-      ? `http://localhost:5454${item.imageUrl}`
+      ? `https://ecommerce-v2-backend-g92n.onrender.com${item.imageUrl}`
       : "https://placehold.co/400x400?text=No+Image";
 
   const handleDecrease = () => {
