@@ -1,0 +1,10 @@
+target/*
+!target/ecommerce-shop-0.0.1-SNAPSHOT.jar
+.git
+.gitignore
+.idea
+.settings
+.project
+.classpath
+.vscode
+*.log

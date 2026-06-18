@@ -1,0 +1,31 @@
+#version: '3.8'
+
+services:
+
+  mysql:
+    image: mysql:8.4
+    container_name: ecommerce-mysql
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ecommerce_shop
+
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build: .
+
+    container_name: ecommerce-app
+
+    ports:
+      - "5454:5454"
+
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
