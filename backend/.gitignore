@@ -96,9 +96,7 @@ Thumbs.db
 
 # Maven Wrapper
 !.mvn/wrapper/maven-wrapper.jar
-
 .metadata/
-.settings/
-.project
-.classpath
-target/
+backend/target/
+frontend/node_modules/
+.env

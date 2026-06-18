@@ -1,9 +1,4 @@
 .metadata/
-.settings/
-.project
-.classpath
-
 backend/target/
 frontend/node_modules/
-
-*.log
+.env
