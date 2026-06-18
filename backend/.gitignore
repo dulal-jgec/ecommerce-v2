@@ -52,7 +52,7 @@ logs/
 .env
 
 # Application config (IMPORTANT)
-application.properties
+
 application.yml
 
 # Maven wrapper (optional keep)
