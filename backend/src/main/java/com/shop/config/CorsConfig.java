@@ -19,7 +19,10 @@ public class CorsConfig {
                 new CorsConfiguration();
 
         configuration.setAllowedOrigins(
-                List.of("http://localhost:5173")
+        		List.of(
+        		        "http://localhost:5173",
+        		        "https://ecommerce-v2-orpin.vercel.app"
+        		    )
         );
 
         configuration.setAllowedMethods(
