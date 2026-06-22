@@ -31,6 +31,8 @@ public class ProductImageServiceImpl implements ProductImageService {
 
     private final UserRepository userRepository;
     
+    private final CloudinaryService cloudinaryService;
+    
     @Override
     public ProductImageResponseDto uploadImage(
             Long productId,
@@ -73,8 +75,7 @@ public class ProductImageServiceImpl implements ProductImageService {
 
         fileValidationService.validateImage(file);
 
-        String imageUrl = fileStorageService.saveFile(file);
-
+        String imageUrl = cloudinaryService.uploadFile(file);
         ProductImage image = new ProductImage();
 
         image.setColor(color);
