@@ -72,8 +72,18 @@ const AdminProducts = () => {
           to="/admin/products/create"
           className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4v16m8-8H4"
+            />
           </svg>
           Add product
         </Link>
@@ -88,7 +98,12 @@ const AdminProducts = () => {
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
           </svg>
           <input
             type="text"
@@ -105,7 +120,9 @@ const AdminProducts = () => {
         >
           <option value="">All categories</option>
           {categories.map((category) => (
-            <option key={category} value={category}>{category}</option>
+            <option key={category} value={category}>
+              {category}
+            </option>
           ))}
         </select>
       </div>
@@ -116,29 +133,49 @@ const AdminProducts = () => {
           <table className="w-full min-w-[900px]">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  ID
+                </th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Image
+                </th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Product
+                </th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Price
+                </th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Stock
+                </th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Category
+                </th>
+                <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {filteredProducts.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="px-4 py-12 text-center text-sm text-gray-500">
+                  <td
+                    colSpan="7"
+                    className="px-4 py-12 text-center text-sm text-gray-500"
+                  >
                     No products found
-                   </td>
-                 </tr>
+                  </td>
+                </tr>
               ) : (
                 filteredProducts.map((product) => (
-                  <tr key={product.id} className="hover:bg-gray-50 transition-colors">
+                  <tr
+                    key={product.id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
                     <td className="px-4 py-3 text-sm text-gray-500 font-mono">
                       {product.id}
                     </td>
-                    
+
                     {/* Image Column */}
                     <td className="px-4 py-3">
                       {product.images && product.images.length > 0 ? (
@@ -146,11 +183,12 @@ const AdminProducts = () => {
                           {product.images.slice(0, 3).map((image, idx) => (
                             <img
                               key={idx}
-                              src={`https://ecommerce-v2-backend-g92n.onrender.com${image.imageUrl}`}
+                              src={image.imageUrl}
                               alt={product.name}
                               className="w-10 h-10 rounded-lg object-cover border-2 border-white shadow-sm"
                               onError={(e) => {
-                                e.target.src = 'https://via.placeholder.com/40x40?text=No+Image';
+                                e.target.src =
+                                  "https://via.placeholder.com/40x40?text=No+Image";
                               }}
                             />
                           ))}
@@ -166,7 +204,7 @@ const AdminProducts = () => {
                         </div>
                       )}
                     </td>
-                    
+
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-medium text-gray-900">
@@ -174,27 +212,33 @@ const AdminProducts = () => {
                         </span>
                       </div>
                     </td>
-                    
+
                     <td className="px-4 py-3 text-sm text-gray-900">
                       ₹{product.price.toLocaleString()}
                     </td>
-                    
+
                     <td className="px-4 py-3">
-                      <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded ${
-                        product.stock > 10
-                          ? "bg-green-50 text-green-700"
-                          : product.stock > 0
-                          ? "bg-yellow-50 text-yellow-700"
-                          : "bg-red-50 text-red-700"
-                      }`}>
-                        {product.stock > 0 ? `${product.stock} units` : "Out of stock"}
+                      <span
+                        className={`inline-flex px-2 py-0.5 text-xs font-medium rounded ${
+                          product.stock > 10
+                            ? "bg-green-50 text-green-700"
+                            : product.stock > 0
+                              ? "bg-yellow-50 text-yellow-700"
+                              : "bg-red-50 text-red-700"
+                        }`}
+                      >
+                        {product.stock > 0
+                          ? `${product.stock} units`
+                          : "Out of stock"}
                       </span>
                     </td>
-                    
+
                     <td className="px-4 py-3">
-                      <span className="text-sm text-gray-600">{product.category}</span>
+                      <span className="text-sm text-gray-600">
+                        {product.category}
+                      </span>
                     </td>
-                    
+
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Link
@@ -202,8 +246,18 @@ const AdminProducts = () => {
                           className="p-1.5 text-purple-600 hover:text-purple-700 transition-colors"
                           title="Manage images"
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
                           </svg>
                         </Link>
                         <Link
@@ -211,8 +265,18 @@ const AdminProducts = () => {
                           className="p-1.5 text-gray-400 hover:text-gray-600 transition-colors"
                           title="Edit product"
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
                           </svg>
                         </Link>
                         <button
@@ -220,8 +284,18 @@ const AdminProducts = () => {
                           className="p-1.5 text-gray-400 hover:text-red-600 transition-colors"
                           title="Delete product"
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
                           </svg>
                         </button>
                       </div>
@@ -242,7 +316,9 @@ const AdminProducts = () => {
         <div className="flex gap-4">
           <span>{categories.length} categories</span>
           <span>{products.filter((p) => p.stock <= 10).length} low stock</span>
-          <span>{products.filter((p) => p.images?.length > 0).length} with images</span>
+          <span>
+            {products.filter((p) => p.images?.length > 0).length} with images
+          </span>
         </div>
       </div>
     </div>

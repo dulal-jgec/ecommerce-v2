@@ -185,7 +185,7 @@ const SellerProducts = () => {
                           {product.images.slice(0, 3).map((image, idx) => (
                             <img
                               key={idx}
-                              src={`https://ecommerce-v2-backend-g92n.onrender.com${image.imageUrl}`}
+                              src={image.imageUrl}
                               alt={product.name}
                               className="w-10 h-10 rounded-lg object-cover border-2 border-white shadow-sm"
                               onError={(e) => {

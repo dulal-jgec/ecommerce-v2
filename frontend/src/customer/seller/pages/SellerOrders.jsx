@@ -27,7 +27,7 @@ const SellerOrders = () => {
       {orders.map((order) => (
         <div key={order.orderItemId} className="border rounded p-4 mb-4">
           <img
-            src={`https://ecommerce-v2-backend-g92n.onrender.com${order.imageUrl}`}
+            src={order.imageUrl}
             alt={order.productName}
             className="w-24 h-24 object-cover rounded"
           />

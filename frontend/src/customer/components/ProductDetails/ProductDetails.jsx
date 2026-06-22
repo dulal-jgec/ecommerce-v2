@@ -169,7 +169,7 @@ export default function ProductDetails() {
                 <div className="col-span-2">
                   <div className="aspect-square overflow-hidden rounded-2xl bg-gray-100 shadow-sm">
                     <img
-                      src={`https://ecommerce-v2-backend-g92n.onrender.com${selectedImage}`}
+                      src={selectedImage}
                       alt="product"
                       className="h-full w-full object-cover object-center hover:scale-105 transition-transform duration-500"
                     />
@@ -185,7 +185,7 @@ export default function ProductDetails() {
                       onClick={() => setSelectedImage(img.imageUrl)}
                     >
                       <img
-                        src={`https://ecommerce-v2-backend-g92n.onrender.com${img.imageUrl}`}
+                        src={img.imageUrl}
                         alt={img.color}
                         className="h-full w-full object-cover object-center"
                       />
