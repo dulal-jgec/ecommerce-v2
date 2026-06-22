@@ -5,11 +5,10 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
   if (!item) return null;
 
   // Robust image handling
-  const imageUrl = item?.selectedImage
-    ? `https://ecommerce-v2-backend-g92n.onrender.com${item.selectedImage}`
-    : item?.imageUrl
-      ? `https://ecommerce-v2-backend-g92n.onrender.com${item.imageUrl}`
-      : "https://placehold.co/400x400?text=No+Image";
+  const imageUrl =
+    item?.selectedImage ||
+    item?.imageUrl ||
+    "https://placehold.co/400x400?text=No+Image";
 
   const handleDecrease = () => {
     if (item.quantity > 1) {
