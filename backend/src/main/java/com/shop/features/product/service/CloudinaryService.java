@@ -22,7 +22,7 @@ public class CloudinaryService {
 									Map.of()
 									);
 				return uploadResult
-						.get("source_url")
+						.get("secure_url")
 						.toString();
 			}
 			catch(IOException e) {
