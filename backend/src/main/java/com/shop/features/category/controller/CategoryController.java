@@ -18,8 +18,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    private final ObjectMapper objectMapper;
-
+ 
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<ApiResponse<?>> createCategory(
 
@@ -29,11 +28,13 @@ public class CategoryController {
 
     ) throws Exception {
 
-        CategoryRequestDto request =
-                objectMapper.readValue(
-                        categoryJson,
-                        CategoryRequestDto.class
-                );
+    	ObjectMapper objectMapper = new ObjectMapper();
+
+    	CategoryRequestDto request =
+    	        objectMapper.readValue(
+    	                categoryJson,
+    	                CategoryRequestDto.class
+    	        );
 
         var response =
                 categoryService.createCategory(
