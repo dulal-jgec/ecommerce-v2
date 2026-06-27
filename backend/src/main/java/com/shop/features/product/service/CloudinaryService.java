@@ -17,7 +17,7 @@ public class CloudinaryService {
 		public String uploadFile(MultipartFile file) {
 			try {
 				Map uploadResult = 
-						Mcloudinary.uploader()
+						cloudinary.uploader()
 							.upload(file.getBytes(),
 									Map.of()
 									);
