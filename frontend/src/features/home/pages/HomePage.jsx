@@ -9,6 +9,7 @@ import SpecialOfferBanner from '../sections/SpecialOfferBanner';
 import NewArrivals from '../sections/NewArrivals';
 import Testimonials from '../sections/Testimonials';
 import NewsletterSection from '../sections/NewsletterSection';
+import TrendingSection from '../sections/TrendingSection';
 
 const HomePage = () => {
   return (
@@ -20,6 +21,7 @@ const HomePage = () => {
       <BestSellers />
       <SpecialOfferBanner />
       <NewArrivals />
+      <TrendingSection />
       <Testimonials />
       <NewsletterSection />
     </div>
