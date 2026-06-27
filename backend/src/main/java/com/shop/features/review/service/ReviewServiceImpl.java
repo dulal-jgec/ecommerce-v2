@@ -151,4 +151,47 @@ public class ReviewServiceImpl implements ReviewService {
                 .map(ReviewMapper::toResponse)
                 .toList();
     }
+    
+    
+    @Override
+    public List<ReviewResponseDto>getFeaturedReviews(){
+    	return reviewRepository
+    			.findTop6ByFeaturedTrueAndApprovedTrueOrderByCreatedAtDesc()
+    			.stream()
+    			.map(ReviewMapper::toResponse)
+    			.toList();
+    	
+    }
+    
+    @Override
+    public ReviewResponseDto featureReview(
+    		Long reviewId
+    		) {
+    			Review review = reviewRepository.findById(reviewId)
+    					.orElseThrow(()->
+    							new ResourceNotFoundException(
+    										"Review not found"
+    									)
+    							);
+    			review.setFeatured(true);
+    			review.setApproved(true);
+    			
+    			Review saveReview = reviewRepository.save(review);
+    			return ReviewMapper.toResponse(saveReview);
+    }
+    
+    @Override
+    public ReviewResponseDto unFeatureReview(
+    		 Long reviewId
+    		) {
+    	Review review=  reviewRepository.findById(reviewId)
+    			.orElseThrow(()->
+    				new ResourceNotFoundException("Review Not Found")
+    					);
+    	review.setFeatured(false);
+    	
+    	Review savReview = reviewRepository.save(review);
+    	return ReviewMapper.toResponse(savReview);
+    }
+    
 }

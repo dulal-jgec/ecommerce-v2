@@ -19,4 +19,10 @@ public interface ReviewService {
 				);
 		
 		List<ReviewResponseDto>getProductReviews(Long productId);
+		
+		List<ReviewResponseDto> getFeaturedReviews();
+
+	    ReviewResponseDto featureReview(Long reviewId);
+
+	    ReviewResponseDto unFeatureReview(Long reviewId);
 }

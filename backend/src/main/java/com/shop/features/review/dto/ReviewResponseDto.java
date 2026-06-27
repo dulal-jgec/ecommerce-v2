@@ -4,14 +4,23 @@ import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Getter;
-
 @Getter
 @Builder
 public class ReviewResponseDto {
-	
-	private Long reviewId;  
-	private String userName; 
-	private Integer rating ; 
-	private String comment; 
-	private LocalDateTime createdAt; 	
+
+    private Long reviewId;
+
+    private Long userId;
+
+    private String userName;
+
+    private String profileImage;
+
+    private Integer rating;
+
+    private String comment;
+
+    private Boolean featured;
+
+    private LocalDateTime createdAt;
 }

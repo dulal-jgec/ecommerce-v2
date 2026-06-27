@@ -83,4 +83,81 @@ public class ReviewController {
                         .build()
         );
     }
+    
+    @GetMapping("/testimonials")
+    public ResponseEntity<ApiResponse<?>> getFeaturedReviews(){
+    	
+    	var response = reviewService.getFeaturedReviews();
+    	
+    	return ResponseEntity.ok(
+    			ApiResponse.builder()
+    			.success(true)
+    			.message("Featured reviews fetched succesfully")
+    			.data(response)
+    			.build()
+    			);
+    }
+    
+    @PutMapping("/{reviewId}/feature")
+    public ResponseEntity<ApiResponse<?>>featureReview(
+    		@PathVariable Long reviewId
+    		){
+    	var response = reviewService.featureReview(reviewId);
+    	
+    	return ResponseEntity.ok(
+                ApiResponse.builder()
+                        .success(true)
+                        .message("Review featured successfully")
+                        .data(response)
+                        .build()
+        );
+    }
+    
+    
+    @PutMapping("/{reviewId}/unfeature")
+    public ResponseEntity<ApiResponse<?>> unFeatureReview(
+            @PathVariable Long reviewId
+    ) {
+
+        var response = reviewService.unFeatureReview(reviewId);
+
+        return ResponseEntity.ok(
+                ApiResponse.builder()
+                        .success(true)
+                        .message("Review removed from featured successfully")
+                        .data(response)
+                        .build()
+        );
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

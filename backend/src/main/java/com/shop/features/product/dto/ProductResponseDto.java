@@ -29,4 +29,10 @@ public class ProductResponseDto {
     private Long sellerId;
     private String sellerEmail;
     
+    private BigDecimal originalPrice;
+    private Integer discount ; 
+    private Double averageRating; 
+    private Integer totalReviews; 
+    
+    
 }

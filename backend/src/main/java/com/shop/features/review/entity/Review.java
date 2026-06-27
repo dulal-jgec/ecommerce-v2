@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
@@ -62,25 +63,22 @@ public class Review {
 		
 		private LocalDateTime createdAt;
 		
+		@Column(nullable = false)
+		private Boolean approved = false ;
+		
+		@Column(nullable = false)
+		private Boolean featured = false ; 
+		
+		private LocalDateTime updatedAt;
+		
+		@PreUpdate
+		public void onUpdate() {
+		    updatedAt = LocalDateTime.now();
+		}
+		
+		
 		@PrePersist
 		public void onCreate() {
 			createdAt=LocalDateTime.now();
 		}	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

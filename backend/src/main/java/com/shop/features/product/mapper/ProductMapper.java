@@ -31,6 +31,10 @@ public class ProductMapper {
 	            .id(product.getId())
 	            .name(product.getName())
 	            .description(product.getDescription())
+	            .originalPrice(product.getOriginalPrice())
+	            .discount(calculateDiscount(product))
+	            .averageRating(0.0)
+	            .totalReviews(0)
 	            .price(product.getPrice())
 	            .stock(product.getStock())
 	            .category(product.getCategory())
@@ -67,6 +71,21 @@ public class ProductMapper {
 	    
 	    
 	    }
+	private static Integer calculateDiscount(Product product) {
+
+	    if (product.getOriginalPrice() == null
+	            || product.getOriginalPrice().doubleValue() == 0) {
+
+	        return 0;
+	    }
+
+	    return (int) (
+	            (product.getOriginalPrice().doubleValue()
+	                    - product.getPrice().doubleValue())
+	                    * 100
+	                    / product.getOriginalPrice().doubleValue()
+	    );
+	}
 	
 	
 	}

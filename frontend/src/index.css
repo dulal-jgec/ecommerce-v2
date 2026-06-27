@@ -1,37 +1,47 @@
 @import "tailwindcss";
-/* GLOBAL THEME COLORS */
-:root {
-  --primary-green: #134e4a;
-  --secondary-green: #065f46;
-  --accent-yellow: #facc15;
-  --light-bg: #f0fdf4; /* very light green */
 
-  /* ✅ ONLY ADDED THIS */
-  --dropdown-bg: linear-gradient(to bottom right, var(--light-bg), #ffffff);
+
+ @import url("https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css");
+@import url("https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css");
+
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
 }
 
-/* APPLY GLOBAL BACKGROUND */
-body {
-  background-color: var(--light-bg);
-  color: #111827;
-  font-family: system-ui, sans-serif;
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
- 
-/* Add to your global CSS file */
-.custom-scrollbar::-webkit-scrollbar {
+
+.animate-slideDown {
+  animation: slideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 3px;
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #10b981, #059669);
+  border-radius: 10px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+::-webkit-scrollbar-thumb:hover {
+  background: #047857;
 }

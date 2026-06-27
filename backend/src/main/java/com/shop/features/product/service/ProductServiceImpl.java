@@ -88,6 +88,7 @@ public class ProductServiceImpl implements ProductService {
         
         // DTO → Entity
         Product product = ProductMapper.toEntity(request);
+        product.setOriginalPrice(request.getOriginalPrice());
         product.setSeller(seller);
         
         product.setFeatured(
@@ -210,6 +211,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(request.getName());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
+        product.setOriginalPrice(request.getOriginalPrice());
         product.setStock(request.getStock());
         product.setCategory(request.getCategory());
         product.setColor(request.getColor());
@@ -233,16 +235,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product savedProduct = productRepository.save(product);
 
-        return ProductResponseDto.builder()
-                .id(savedProduct.getId())
-                .name(savedProduct.getName())
-                .description(savedProduct.getDescription())
-                .price(savedProduct.getPrice())
-                .stock(savedProduct.getStock())
-                .category(savedProduct.getCategory())
-                .color(savedProduct.getColor())
-                .size(savedProduct.getSize())
-                .build();
+        return ProductMapper.toResponse(savedProduct);
     }
     
     @Override

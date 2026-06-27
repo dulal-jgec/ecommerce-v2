@@ -73,13 +73,16 @@ public class Product {
     private Boolean newArrival = false;
     
     
+    
+    
     @Column(nullable = false)
     private Boolean bestSeller=false;
     
     @Column(nullable = false)
     private Boolean trending = false; 
     
-    
+    @Column(precision = 10, scale = 2)
+    private BigDecimal originalPrice;
     
     
     @PrePersist

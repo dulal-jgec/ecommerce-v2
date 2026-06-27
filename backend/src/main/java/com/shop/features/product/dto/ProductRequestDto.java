@@ -42,5 +42,6 @@ public class ProductRequestDto {
     private Boolean bestSeller;
 
     private Boolean trending;
+    private BigDecimal originalPrice;
     
 }
