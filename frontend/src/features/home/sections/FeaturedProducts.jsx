@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Star, ShoppingCart, Heart } from "lucide-react";
 import { getFeaturedProducts } from "../../products/services/productService";
+import { useNavigate } from "react-router-dom";
+import AddToCartButton from "../../products/components/AddToCartButton";
 
 const FeaturedProducts = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +39,10 @@ const FeaturedProducts = () => {
           <h2 className="text-2xl font-bold text-gray-800">
             Featured Products
           </h2>
-          <button className="text-blue-600 font-medium hover:text-blue-700 transition">
+          <button
+            onClick={() => navigate("/products?type=featured")}
+            className="text-blue-600 font-medium hover:text-blue-700 transition"
+          >
             View All →
           </button>
         </div>
@@ -94,10 +100,9 @@ const FeaturedProducts = () => {
                     </span>
                   )}
                 </div>
-                <button className="w-full mt-3 py-2 bg-blue-600 text-white rounded-xl font-medium text-sm hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2">
-                  <ShoppingCart size={16} />
-                  Add to Cart
-                </button>
+               <AddToCartButton
+    productId={product.id}
+/>
               </div>
             </div>
           ))}

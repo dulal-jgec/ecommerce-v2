@@ -49,6 +49,7 @@ public class CartMapper {
 	                 .map(img->img.getImageUrl())
 	                .orElse(null);
 	    }
+	    
 
 	    return CartItemResponseDto.builder()
 	            .cartItemId(item.getId())
@@ -56,6 +57,11 @@ public class CartMapper {
 	            .productName(item.getProduct().getName())
 	            .quantity(item.getQuantity())
 	            .price(item.getPrice())
+	            .subtotal(
+	                    item.getPrice().multiply(
+	                            BigDecimal.valueOf(item.getQuantity())
+	                    )
+	            )
 	            .imageUrl(imageUrl)
 	            .color(item.getColor())
 	            .build();

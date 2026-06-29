@@ -16,5 +16,6 @@ public class CartItemResponseDto {
 	private String imageUrl;
 	private Long cartItemId;
 	private String color;
+	private BigDecimal subtotal;
 	
 }

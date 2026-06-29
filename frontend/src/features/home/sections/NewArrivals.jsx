@@ -1,9 +1,11 @@
-
-import React, { useState, useEffect } from 'react';
-import { Star, ShoppingCart } from 'lucide-react';
-import { getNewArrivalProducts } from '../../products/services/productService';
+import React, { useState, useEffect } from "react";
+import { Star, ShoppingCart } from "lucide-react";
+import { getNewArrivalProducts } from "../../products/services/productService";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const NewArrivals = () => {
+ const navigate = useNavigate();
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -13,7 +15,7 @@ const NewArrivals = () => {
         const data = await getNewArrivalProducts();
         setProducts(data);
       } catch (error) {
-        console.error('Error loading new arrivals:', error);
+        console.error("Error loading new arrivals:", error);
       } finally {
         setLoading(false);
       }
@@ -46,7 +48,10 @@ const NewArrivals = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">🆕 New Arrivals</h2>
-          <button className="text-blue-600 font-medium hover:text-blue-700 transition">
+          <button
+            onClick={() => navigate("/products?type=new-arrivals")}
+            className="text-blue-600 font-medium hover:text-blue-700 transition"
+          >
             View All →
           </button>
         </div>
@@ -59,7 +64,9 @@ const NewArrivals = () => {
             >
               <div className="bg-gray-100 p-6 flex justify-center items-center h-48">
                 <img
-                  src={product.images?.[0]?.imageUrl || '/images/placeholder.png'}
+                  src={
+                    product.images?.[0]?.imageUrl || "/images/placeholder.png"
+                  }
                   alt={product.name}
                   className="h-40 object-contain group-hover:scale-105 transition-transform duration-300"
                 />

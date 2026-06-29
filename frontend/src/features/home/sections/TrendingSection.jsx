@@ -1,7 +1,7 @@
 // src/features/home/sections/TrendingSection.jsx
-import React, { useState, useEffect } from 'react';
-import { Star, ShoppingCart } from 'lucide-react';
-import { getTrendingProducts } from '../../products/services/productService';
+import React, { useState, useEffect } from "react";
+import { Star, ShoppingCart } from "lucide-react";
+import { getTrendingProducts } from "../../products/services/productService";
 
 const TrendingSection = () => {
   const [products, setProducts] = useState([]);
@@ -13,7 +13,7 @@ const TrendingSection = () => {
         const data = await getTrendingProducts();
         setProducts(data);
       } catch (error) {
-        console.error('Error loading trending:', error);
+        console.error("Error loading trending:", error);
       } finally {
         setLoading(false);
       }
@@ -40,7 +40,10 @@ const TrendingSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">📈 Trending Now</h2>
-          <button className="text-blue-600 font-medium hover:text-blue-700 transition">
+          <button
+            onClick={() => navigate("/products?type=trending")}
+            className="text-blue-600 font-medium hover:text-blue-700 transition"
+          >
             View All →
           </button>
         </div>
@@ -53,7 +56,9 @@ const TrendingSection = () => {
             >
               <div className="bg-gray-100 p-6 flex justify-center items-center h-48">
                 <img
-                  src={product.images?.[0]?.imageUrl || '/images/placeholder.png'}
+                  src={
+                    product.images?.[0]?.imageUrl || "/images/placeholder.png"
+                  }
                   alt={product.name}
                   className="h-40 object-contain group-hover:scale-105 transition-transform duration-300"
                 />

@@ -1,6 +1,8 @@
 // src/shared/services/apiClient.js
 import axios from 'axios';
 import { API_BASE_URL } from './apiEndpoints';
+import { tokenManager } from '../utils/tokenManagerr';
+
 
 // নতুন instance তৈরি করুন
 const apiClient = axios.create({
@@ -16,16 +18,23 @@ const apiClient = axios.create({
 // Request interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    console.log('🚀 Request:', {
+
+    const token = tokenManager.getAccessToken();
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    console.log("🚀 Request:", {
       url: config.url,
       method: config.method,
       data: config.data,
-      headers: config.headers
+      headers: config.headers,
     });
+
     return config;
   },
   (error) => {
-    console.error('❌ Request Error:', error);
     return Promise.reject(error);
   }
 );

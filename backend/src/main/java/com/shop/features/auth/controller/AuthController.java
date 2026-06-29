@@ -2,8 +2,10 @@ package com.shop.features.auth.controller;
 
 import java.lang.module.ModuleDescriptor.Builder;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,8 @@ import com.shop.features.auth.dto.RefreshTokenRequestDto;
 import com.shop.features.auth.dto.RegisterRequestDto;
 import com.shop.features.auth.entity.RefreshToken;
 import com.shop.features.auth.service.AuthService;
+import com.shop.features.user.entity.User;
+import com.shop.features.user.service.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 		
 	private final AuthService authService;
+	private final UserService userService;
 	
 	@PostMapping("/register")
 	
@@ -90,7 +95,27 @@ public class AuthController {
 	    );
 	}
 	
+	@GetMapping("/me")
+	public ResponseEntity<ApiResponse<User>> getCurrentUser(
+			Authentication authentication
+	) {
+		String email = authentication.name(); 
+		User user = userService.findByEmail(email)
+				.orElseThrow(() -> new RuntimeException("User not found"));
+		
+		return ResponseEntity.ok(
+				ApiResponse.<User>builder()
+						.success(true)
+						.message("User fetched successfully")
+						.data(user)
+						.build()
+		);
+	}
+	
+	
+	
 }
+
 
 
 

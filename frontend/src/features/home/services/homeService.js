@@ -6,3 +6,8 @@ export const getTestimonials = async () => {
     return response.data.data;
 };
 
+export const getCategories = async () => {
+  const response = await apiClient.get("/api/v1/categories");
+  return response.data.data;
+};
+
