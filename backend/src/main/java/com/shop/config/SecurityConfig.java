@@ -41,21 +41,23 @@ public class SecurityConfig {
 	    		        "/swagger-ui.html",
 	    		        "/v3/api-docs/**"
 	    		).permitAll()
+ 	    		
+ 	    		.requestMatchers(
+	    		        "/api/v1/products/my-products",  
+	    		        "/api/v1/orders/seller/**"      
+	    		).hasAnyRole("SELLER", "ADMIN")
 	    		
- 	    		.requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
 	    		
  	    		.requestMatchers(
 	    		        "/api/v1/users/admin/**",     
 	    		        "/api/v1/orders/admin/**",   
 	    		        "/api/v1/seller/**",         
-	    		        "/api/v1/reviews/**/feature",   
-	    		        "/api/v1/reviews/**/unfeature"  
+	    		        "/api/v1/reviews/*/feature",   
+	    		        "/api/v1/reviews/*/unfeature"  
 	    		).hasRole("ADMIN")
 	    		
- 	    		.requestMatchers(
-	    		        "/api/v1/products/my-products",  
-	    		        "/api/v1/orders/seller/**"      
-	    		).hasAnyRole("SELLER", "ADMIN")
+ 	    		.requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
+
 	    		
  	    		.requestMatchers(HttpMethod.POST, "/api/v1/products").hasAnyRole("SELLER", "ADMIN")
 	    		.requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasAnyRole("SELLER", "ADMIN")
