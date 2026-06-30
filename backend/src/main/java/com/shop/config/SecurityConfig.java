@@ -32,7 +32,8 @@ public class SecurityConfig {
 	    		        "/api/v1/auth/**",           
 	    		        "/api/v1/products/featured",  
 	    		        "/api/v1/products/best-sellers",  
-	    		        "/api/v1/products/trending",  
+	    		        "/api/v1/products/trending", 
+	    		        "/api/v1/products/new-arrivals",
 	    		        "/api/v1/products/search",    
 	    		        "/api/v1/categories",         
 	    		        "/api/v1/reviews/testimonials",  
@@ -62,7 +63,11 @@ public class SecurityConfig {
  	    		.requestMatchers(HttpMethod.POST, "/api/v1/products").hasAnyRole("SELLER", "ADMIN")
 	    		.requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasAnyRole("SELLER", "ADMIN")
 	    		.requestMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasAnyRole("SELLER", "ADMIN")
-	    		.requestMatchers("/api/v1/products/**/images/**").hasAnyRole("SELLER", "ADMIN")
+	    		.requestMatchers(
+	    			    "/api/v1/products/*/images",
+	    			    "/api/v1/products/*/images/batch",
+	    			    "/api/v1/products/images/*"
+	    			).hasAnyRole("SELLER", "ADMIN")
 	    		
  	    		.requestMatchers(
 	    		        "/api/v1/cart/**",            
