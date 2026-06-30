@@ -17,5 +17,6 @@ public class OrderItemResponseDto {
     private BigDecimal price;
     private String color;
     private OrderItemStatus status;
+    private String imageUrl;
     
 }

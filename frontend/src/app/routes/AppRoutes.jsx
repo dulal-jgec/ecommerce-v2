@@ -44,6 +44,7 @@ import SellerReturns from "../../features/seller/pages/ReturnsPage";
 import SellerStoreProfile from "../../features/seller/pages/StoreProfilePage";
 import SellerBankDetails from "../../features/seller/pages/BankDetailsPage";
 
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -61,6 +62,7 @@ const AppRoutes = () => {
 
       {/* ===== Checkout Routes ===== */}
       <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/checkout/payment/:orderId" element={<PaymentPage />} />
 
       {/* ===== Orders Routes ===== */}
       <Route path="/orders" element={<OrderHistoryPage />} />

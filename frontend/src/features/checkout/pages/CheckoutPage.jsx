@@ -1,15 +1,49 @@
 // src/features/checkout/pages/CheckoutPage.jsx
-import React, { useState } from 'react';
-import { useCheckout } from '../hooks/useCheckout';
-import CheckoutLayout from '../components/CheckoutLayout';
-import ShippingAddress from '../components/ShippingAddress';
-import DeliveryOptions from '../components/DeliveryOptions';
-import PaymentMethod from '../components/PaymentMethod';
-import OrderSummary from '../components/OrderSummary';
-import CouponSection from '../components/CouponSection';
-import PlaceOrderButton from '../components/PlaceOrderButton';
+import React, { useState } from "react";
+import { useCheckout } from "../hooks/useCheckout";
+import CheckoutLayout from "../components/CheckoutLayout";
+import ShippingAddress from "../components/ShippingAddress";
+import DeliveryOptions from "../components/DeliveryOptions";
+import PaymentMethod from "../components/PaymentMethod";
+import OrderSummary from "../components/OrderSummary";
+import CouponSection from "../components/CouponSection";
+import PlaceOrderButton from "../components/PlaceOrderButton";
+import { useNavigate } from "react-router-dom";
+import { createPayment, verifyPayment } from "../services/checkoutService";
 
 const CheckoutPage = () => {
+  const navigate = useNavigate();
+
+  const openRazorpay = (payment) => {
+    const options = {
+      key: payment.key,
+
+      order_id: payment.razorpayOrderId,
+
+      name: "My Shop",
+
+      description: "Order Payment",
+
+      handler: async function (response) {
+        await verifyPayment({
+          razorpayOrderId: response.razorpay_order_id,
+
+          razorpayPaymentId: response.razorpay_payment_id,
+
+          razorpaySignature: response.razorpay_signature,
+        });
+
+        alert("Payment Success");
+
+        navigate("/orders");
+      },
+    };
+
+    const razor = new window.Razorpay(options);
+
+    razor.open();
+  };
+
   const {
     loading,
     error,
@@ -24,8 +58,10 @@ const CheckoutPage = () => {
     coupon,
     discount,
     total,
+
     handleAddAddress,
     handleSetDefaultAddress,
+    handleDeleteAddress,
     handleApplyCoupon,
     handlePlaceOrder,
   } = useCheckout();
@@ -38,6 +74,18 @@ const CheckoutPage = () => {
       const order = await handlePlaceOrder();
       if (order) setStep(3);
     }
+  };
+
+  const handleFinalOrder = async () => {
+    const order = await handlePlaceOrder();
+
+    if (!order) return;
+
+    const payment = await createPayment({
+      orderId: order.orderId,
+    });
+
+    openRazorpay(payment);
   };
 
   return (
@@ -54,6 +102,7 @@ const CheckoutPage = () => {
                 onSelect={setSelectedAddress}
                 onAdd={handleAddAddress}
                 onSetDefault={handleSetDefaultAddress}
+                onDelete={handleDeleteAddress}
               />
               <button
                 onClick={handleNext}
@@ -69,13 +118,19 @@ const CheckoutPage = () => {
           {step === 2 && (
             <div className="space-y-6">
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <DeliveryOptions selected={shippingMethod} onSelect={setShippingMethod} />
+                <DeliveryOptions
+                  selected={shippingMethod}
+                  onSelect={setShippingMethod}
+                />
               </div>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <PaymentMethod selected={paymentMethod} onSelect={setPaymentMethod} />
+                <PaymentMethod
+                  selected={paymentMethod}
+                  onSelect={setPaymentMethod}
+                />
               </div>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <CouponSection 
+                <CouponSection
                   onApply={handleApplyCoupon}
                   onRemove={() => {}}
                   discount={discount}
@@ -87,7 +142,7 @@ const CheckoutPage = () => {
                 disabled={loading}
                 className="w-full py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {loading ? 'Processing...' : 'Review Order'}
+                {loading ? "Processing..." : "Review Order"}
               </button>
             </div>
           )}
@@ -102,36 +157,44 @@ const CheckoutPage = () => {
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between py-2 border-b border-gray-100">
                   <span className="text-gray-500">Delivery</span>
-                  <span className="text-gray-800 capitalize">{shippingMethod}</span>
+                  <span className="text-gray-800 capitalize">
+                    {shippingMethod}
+                  </span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-gray-100">
                   <span className="text-gray-500">Payment</span>
-                  <span className="text-gray-800 capitalize">{paymentMethod}</span>
+                  <span className="text-gray-800 capitalize">
+                    {paymentMethod}
+                  </span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-gray-100">
                   <span className="text-gray-500">Shipping Address</span>
                   <span className="text-gray-800 text-right">
-                    {selectedAddress?.fullName}<br />
-                    {selectedAddress?.street}<br />
+                    {selectedAddress?.fullName}
+                    <br />
+                    {selectedAddress?.street}
+                    <br />
                     {selectedAddress?.city}, {selectedAddress?.state}
                   </span>
                 </div>
               </div>
               <PlaceOrderButton
-                onClick={handlePlaceOrder}
+                onClick={handleFinalOrder}
                 loading={loading}
-                total={total}
+                total={cart.totalPrice}
               />
-              {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+              {error && (
+                <p className="text-sm text-red-500 text-center">{error}</p>
+              )}
             </div>
           )}
         </div>
 
         {/* Right Column - Order Summary */}
         <div className="lg:col-span-1">
-          <OrderSummary 
-            cart={cart} 
-            shippingCost={shippingMethod === 'express' ? 100 : 0}
+          <OrderSummary
+            cart={cart}
+            shippingCost={shippingMethod === "express" ? 100 : 0}
             discount={discount}
           />
         </div>

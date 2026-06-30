@@ -1,17 +1,19 @@
-// src/features/checkout/hooks/useCheckout.js
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  getCart, 
-  getAddresses, 
-  addAddress, 
+import {
+  getCart,
+  getAddresses,
+  addAddress,
+  updateAddress,
+  deleteAddress,
   setDefaultAddress,
   placeOrder,
   createPayment,
   verifyPayment,
   clearCart,
-  applyCoupon
-} from '../services/checkoutService';
+  applyCoupon,
+} from "../services/checkoutService";
 
 export const useCheckout = () => {
   const navigate = useNavigate();
@@ -67,6 +69,24 @@ export const useCheckout = () => {
       setError(err.message);
     }
   };
+const handleDeleteAddress = async (id) => {
+  try {
+    await deleteAddress(id);
+
+    const updatedAddresses = addresses.filter(
+      (address) => address.id !== id
+    );
+
+    setAddresses(updatedAddresses);
+
+    if (selectedAddress?.id === id) {
+      setSelectedAddress(updatedAddresses[0] || null);
+    }
+  } catch (err) {
+    setError(err.message);
+  }
+};
+
 
   const handleApplyCoupon = async (code) => {
     try {
@@ -80,58 +100,31 @@ export const useCheckout = () => {
     }
   };
 
-  const handlePlaceOrder = async () => {
-    if (!selectedAddress) {
-      setError('Please select a shipping address');
-      return;
-    }
+const handlePlaceOrder = async () => {
+  if (!selectedAddress) {
+    setError("Please select a shipping address");
+    return;
+  }
 
+  try {
     setLoading(true);
     setError(null);
-    try {
-      const orderData = {
-        addressId: selectedAddress.id,
-        shippingMethod,
-        paymentMethod,
-        couponCode: coupon?.code || null,
-      };
-      const order = await placeOrder(orderData);
-      setOrderId(order.id);
-      return order;
-    } catch (err) {
-      setError(err.message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const handlePayment = async (paymentDetails) => {
-    if (!orderId) {
-      setError('No order found. Please place order first.');
-      return;
-    }
-    setLoading(true);
-    try {
-      const paymentData = {
-        orderId,
-        method: paymentMethod,
-        ...paymentDetails,
-      };
-      const result = await createPayment(paymentData);
-      // Verify payment
-      await verifyPayment({ orderId, paymentId: result.id });
-      await clearCart();
-      navigate(`/orders/success/${orderId}`);
-      return result;
-    } catch (err) {
-      setError(err.message);
-      navigate(`/payment/failed/${orderId}`);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
+    const order = await placeOrder({
+      addressId: selectedAddress.id,
+    });
+
+    setOrderId(order.orderId);
+
+    return order;
+
+  } catch (err) {
+    setError(err.response?.data?.message || err.message);
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+};
 
   const getTotal = () => {
     const subtotal = cart.subtotal || 0;
@@ -142,27 +135,28 @@ export const useCheckout = () => {
   useEffect(() => {
     loadCheckoutData();
   }, []);
+return {
+  loading,
+  error,
+  cart,
+  addresses,
+  selectedAddress,
+  setSelectedAddress,
+  shippingMethod,
+  setShippingMethod,
+  paymentMethod,
+  setPaymentMethod,
+  coupon,
+  discount,
+  orderId,
+  total: getTotal(),
 
-  return {
-    loading,
-    error,
-    cart,
-    addresses,
-    selectedAddress,
-    setSelectedAddress,
-    shippingMethod,
-    setShippingMethod,
-    paymentMethod,
-    setPaymentMethod,
-    coupon,
-    discount,
-    orderId,
-    total: getTotal(),
-    handleAddAddress,
-    handleSetDefaultAddress,
-    handleApplyCoupon,
-    handlePlaceOrder,
-    handlePayment,
-    loadCheckoutData,
-  };
+  handleAddAddress,
+  handleSetDefaultAddress,
+  handleDeleteAddress,   
+
+  handleApplyCoupon,
+  handlePlaceOrder,
+  loadCheckoutData,
+};
 };

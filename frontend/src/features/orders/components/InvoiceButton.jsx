@@ -104,7 +104,7 @@ const InvoiceButton = ({
               ${orderData?.items?.map((item, index) => `
                 <tr>
                   <td>${index + 1}</td>
-                  <td>${item.name}</td>
+                  <td>${item.productName}</td>
                   <td>${item.quantity}</td>
                   <td>₹${item.price}</td>
                   <td>₹${item.price * item.quantity}</td>

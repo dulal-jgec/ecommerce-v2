@@ -14,18 +14,32 @@ public class OrderMapper {
 
     public static OrderResponseDto toResponseDto(Order order) {
 
-        List<OrderItemResponseDto> items =
-                order.getItems()
-                        .stream()
-                        .map(item ->
-                                OrderItemResponseDto.builder()
-                                        .productName(item.getProduct().getName())
-                                        .quantity(item.getQuantity())
-                                        .price(item.getPrice())
-                                        .status(item.getStatus())
-                                        .build()
-                        )
-                        .toList();
+    	List<OrderItemResponseDto> items =
+    	        order.getItems()
+    	                .stream()
+    	                .map(item -> {
+
+    	                    String imageUrl = item.getProduct()
+    	                            .getImages()
+    	                            .stream()
+    	                            .filter(img ->
+    	                                    img.getColor()
+    	                                            .equalsIgnoreCase(item.getColor()))
+    	                            .findFirst()
+    	                            .map(img -> img.getImageUrl())
+    	                            .orElse(null);
+
+    	                    return OrderItemResponseDto.builder()
+    	                            .productId(item.getProduct().getId())
+    	                            .productName(item.getProduct().getName())
+    	                            .quantity(item.getQuantity())
+    	                            .price(item.getPrice())
+    	                            .color(item.getColor())
+    	                            .imageUrl(imageUrl)
+    	                            .status(item.getStatus())
+    	                            .build();
+    	                })
+    	                .toList();
 
         return OrderResponseDto.builder()
                 .orderId(order.getId())

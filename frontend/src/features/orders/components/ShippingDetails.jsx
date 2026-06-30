@@ -1,6 +1,6 @@
 // src/features/orders/components/ShippingDetails.jsx
-import React from 'react';
-import { MapPin, User, Phone, Mail, Clock, Package } from 'lucide-react';
+import React from "react";
+import { MapPin, User, Phone, Mail, Clock, Package } from "lucide-react";
 
 const ShippingDetails = ({ address, status, createdAt }) => {
   if (!address) {
@@ -13,13 +13,21 @@ const ShippingDetails = ({ address, status, createdAt }) => {
 
   const getStatusInfo = (status) => {
     const map = {
-      'PENDING': { label: 'Order Placed', icon: Clock, color: 'text-orange-500' },
-      'PROCESSING': { label: 'Processing', icon: Package, color: 'text-yellow-500' },
-      'SHIPPED': { label: 'Shipped', icon: Package, color: 'text-blue-500' },
-      'DELIVERED': { label: 'Delivered', icon: Package, color: 'text-emerald-500' },
-      'CANCELLED': { label: 'Cancelled', icon: Package, color: 'text-red-500' },
+      PENDING: { label: "Order Placed", icon: Clock, color: "text-orange-500" },
+      PROCESSING: {
+        label: "Processing",
+        icon: Package,
+        color: "text-yellow-500",
+      },
+      SHIPPED: { label: "Shipped", icon: Package, color: "text-blue-500" },
+      DELIVERED: {
+        label: "Delivered",
+        icon: Package,
+        color: "text-emerald-500",
+      },
+      CANCELLED: { label: "Cancelled", icon: Package, color: "text-red-500" },
     };
-    return map[status] || map['PENDING'];
+    return map[status] || map["PENDING"];
   };
 
   const statusInfo = getStatusInfo(status);
@@ -31,7 +39,9 @@ const ShippingDetails = ({ address, status, createdAt }) => {
         <h3 className="font-semibold text-gray-800">Shipping Details</h3>
         {status && (
           <span className={`ml-auto text-sm font-medium ${statusInfo.color}`}>
-            {statusInfo.icon && <statusInfo.icon size={14} className="inline mr-1" />}
+            {statusInfo.icon && (
+              <statusInfo.icon size={14} className="inline mr-1" />
+            )}
             {statusInfo.label}
           </span>
         )}
@@ -43,12 +53,12 @@ const ShippingDetails = ({ address, status, createdAt }) => {
           <p className="font-medium text-gray-800">{address.fullName}</p>
           <p className="text-sm text-gray-600">{address.street}</p>
           <p className="text-sm text-gray-600">
-            {address.city}, {address.state} - {address.pincode}
+            {address.city}, {address.state} - {address.postalCode}
           </p>
           <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
             <span className="flex items-center gap-1">
               <Phone size={14} />
-              {address.phone}
+              {address.phoneNumber}
             </span>
             {address.email && (
               <span className="flex items-center gap-1">
@@ -64,23 +74,25 @@ const ShippingDetails = ({ address, status, createdAt }) => {
           <div className="p-3 bg-gray-50 rounded-xl text-center">
             <p className="text-gray-500">Order Date</p>
             <p className="font-medium text-gray-800">
-              {createdAt ? new Date(createdAt).toLocaleDateString('en-IN', {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric',
-              }) : '-'}
+              {createdAt
+                ? new Date(createdAt).toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })
+                : "-"}
             </p>
           </div>
           <div className="p-3 bg-gray-50 rounded-xl text-center">
             <p className="text-gray-500">Status</p>
             <p className={`font-medium ${statusInfo.color}`}>
-              {status || 'Pending'}
+              {status || "Pending"}
             </p>
           </div>
         </div>
 
         {/* Delivery Estimate */}
-        {status !== 'DELIVERED' && status !== 'CANCELLED' && (
+        {status !== "DELIVERED" && status !== "CANCELLED" && (
           <div className="flex items-center gap-2 p-3 bg-emerald-50 rounded-xl text-emerald-700 text-sm">
             <Clock size={16} />
             <span>Estimated delivery: 3-5 business days</span>

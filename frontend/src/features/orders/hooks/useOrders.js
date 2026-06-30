@@ -12,9 +12,9 @@ export const useOrders = () => {
   const loadOrders = async () => {
     setLoading(true);
     try {
-      const data = await getMyOrders(page, 10);
-      setOrders(data.content || []);
-      setTotalPages(data.totalPages || 0);
+      const data = await getMyOrders();
+      setOrders(data);
+      setTotalPages(1);
     } catch (err) {
       setError(err.message);
     } finally {

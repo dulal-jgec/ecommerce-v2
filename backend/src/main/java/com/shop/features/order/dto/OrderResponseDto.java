@@ -23,7 +23,7 @@ public class OrderResponseDto {
 
     private LocalDateTime createdAt;
 
-    // Shipping Snapshot
+   
 
     private String shippingFullName;
     private String shippingPhoneNumber;

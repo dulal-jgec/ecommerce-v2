@@ -1,4 +1,3 @@
-// src/features/orders/services/orderService.js
 import apiClient from '../../../shared/services/apiClient';
 import { ORDERS } from '../../../shared/services/apiEndpoints';
 

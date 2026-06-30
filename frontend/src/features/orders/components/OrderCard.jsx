@@ -13,7 +13,7 @@ const OrderCard = ({ order }) => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-3">
-              <span className="font-semibold text-gray-800">#{order.id}</span>
+              <span className="font-semibold text-gray-800">#{order.orderId}</span>
               <OrderStatusBadge status={order.status} />
             </div>
             <p className="text-sm text-gray-500 mt-1">
@@ -31,7 +31,7 @@ const OrderCard = ({ order }) => {
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-500">Total</p>
-              <p className="font-bold text-emerald-600">₹{order.total?.toLocaleString()}</p>
+              <p className="font-bold text-emerald-600">₹{order.totalPrice?.toLocaleString()}</p>
             </div>
             <ChevronRight size={20} className="text-gray-400" />
           </div>
