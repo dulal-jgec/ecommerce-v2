@@ -68,6 +68,10 @@ export const getAllSellers = async () => {
     const response = await apiClient.get("/api/v1/seller/admin");
     return response.data;
 };
+export const getPendingSellers = async () => {
+    const response = await apiClient.get("/api/v1/seller/pending");
+    return response.data;
+};
 
 export const approveSeller = async (id) => {
   const response = await apiClient.put(SELLER.APPROVE(id));
