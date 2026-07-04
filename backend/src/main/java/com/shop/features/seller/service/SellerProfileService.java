@@ -17,4 +17,5 @@ public interface SellerProfileService {
     void rejectSeller(Long sellerProfileId);
     List<SellerProfileResponseDto>
     getPendingApplications();
+    List<SellerProfileResponseDto> getAllSellers();
 }

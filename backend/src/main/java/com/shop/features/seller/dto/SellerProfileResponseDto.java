@@ -1,19 +1,29 @@
 package com.shop.features.seller.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class SellerProfileResponseDto {
+public class SellerProfileResponseDto { private Long id;
 
-    private Long id;
+private String firstName;
 
-    private String email;
+private String lastName;
 
-    private String shopName;
+private String email;
 
-    private String description;
+private String phoneNumber;
 
-    private String status;
+private String shopName;
+
+private String description;
+
+private String logo;
+
+private String status;
+
+private LocalDateTime appliedAt;
 }

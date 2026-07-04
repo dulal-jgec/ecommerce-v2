@@ -101,6 +101,24 @@ public class SellerProfileServiceImpl
                 )
                 .toList();
     }
+    public List<SellerProfileResponseDto> getAllSellers() {
+
+        return sellerProfileRepository.findAll()
+                .stream()
+                .map(profile ->
+                        SellerProfileResponseDto.builder()
+                                .id(profile.getId())
+                                .email(profile.getUser().getEmail())
+                                .shopName(profile.getShopName())
+                                .description(profile.getDescription())
+                                .status(profile.getStatus().name())
+                                .firstName(profile.getUser().getFirstName())
+                                .lastName(profile.getUser().getLastName())
+                                .phoneNumber(profile.getUser().getPhoneNumber())
+                                .appliedAt(profile.getAppliedAt())
+                                .build())
+                .toList();
+    }
     
     
 }

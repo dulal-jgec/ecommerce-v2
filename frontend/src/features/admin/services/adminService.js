@@ -34,10 +34,10 @@ export const getDashboardStats = async () => {
 };
 
 // ============ Users ============
-export const getAllUsers = async (page = 0, size = 10) => {
+export const getAllUsers = async (role ,page = 0, size = 10) => {
   try {
     const response = await apiClient.get(USER.ADMIN_ALL, {
-      params: { page, size }
+      params: {role, page, size },
     });
     return response.data.data;
   } catch (error) {
@@ -64,9 +64,9 @@ export const deleteUser = async (userId) => {
 };
 
 // ============ Sellers ============
-export const getPendingSellers = async () => {
-  const response = await apiClient.get(SELLER.PENDING);
-  return response.data.data || [];
+export const getAllSellers = async () => {
+    const response = await apiClient.get("/api/v1/seller/admin");
+    return response.data;
 };
 
 export const approveSeller = async (id) => {

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +19,7 @@ public class SellerProfileController {
     private final SellerProfileService sellerProfileService;
 
    
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/pending")
     public List<SellerProfileResponseDto>
     getPendingApplications() {
@@ -27,6 +28,7 @@ public class SellerProfileController {
                 .getPendingApplications();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/approve")
     public void approveSeller(
             @PathVariable Long id
@@ -34,12 +36,17 @@ public class SellerProfileController {
         sellerProfileService
                 .approveSeller(id);
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/reject")
     public void rejectSeller(
             @PathVariable Long id
     ) {
         sellerProfileService
                 .rejectSeller(id);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin")
+    public List<SellerProfileResponseDto> getAllSellers() {
+        return sellerProfileService.getAllSellers();
     }
 }

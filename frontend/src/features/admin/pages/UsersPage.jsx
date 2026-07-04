@@ -34,7 +34,7 @@ const UsersPage = () => {
   const loadUsers = async () => {
     setLoading(true);
     try {
-      const data = await getAllUsers(page, 10);
+      const data = await getAllUsers("BUYER" ,page, 10);
       setUsers(data.content || []);
       setTotalPages(data.totalPages || 0);
     } catch (error) {
