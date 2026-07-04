@@ -71,8 +71,8 @@ const CheckoutPage = () => {
   const handleNext = async () => {
     if (step === 1 && selectedAddress) setStep(2);
     else if (step === 2) {
-      const order = await handlePlaceOrder();
-      if (order) setStep(3);
+       
+      setStep(3);
     }
   };
 

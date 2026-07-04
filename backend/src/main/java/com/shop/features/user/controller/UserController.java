@@ -24,12 +24,13 @@ public class UserController {
      
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Page<User>>> getAllUsers(
+    public ResponseEntity<ApiResponse<Page<User>>> getUsers(
+    		@RequestParam UserRole role,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<User> users = userService.getAllUsers(pageable);
+        Page<User> users = userService.getUsersByRole( role ,pageable);
         
         return ResponseEntity.ok(
                 ApiResponse.<Page<User>>builder()

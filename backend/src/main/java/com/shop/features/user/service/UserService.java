@@ -18,8 +18,8 @@ public class UserService {
     private final UserRepository userRepository;
 
      
-    public Page<User> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<User> getUsersByRole(UserRole role, Pageable pageable) {
+        return userRepository.findByRole(role, pageable);
     }
     
     public Optional<User> findByEmail(String email) {

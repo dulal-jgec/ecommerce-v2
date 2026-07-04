@@ -1,13 +1,13 @@
 // src/features/orders/components/OrderTimeline.jsx
 import React from 'react';
-import { Check, Clock, Package, Truck, X, Circle } from 'lucide-react';
+import { Check, Clock, Package, Truck, X, Calendar } from 'lucide-react';
 
-const OrderTimeline = ({ status, createdAt, updatedAt, timeline = [] }) => {
+const OrderTimeline = ({ status, createdAt, updatedAt }) => {
   const steps = [
-    { id: 'PENDING', label: 'Order Placed', icon: Clock, description: 'Your order has been confirmed' },
-    { id: 'PROCESSING', label: 'Processing', icon: Package, description: 'We are preparing your order' },
-    { id: 'SHIPPED', label: 'Shipped', icon: Truck, description: 'Your order is on the way' },
-    { id: 'DELIVERED', label: 'Delivered', icon: Check, description: 'Your order has been delivered' },
+    { id: 'PENDING', label: 'Order Placed', icon: Clock, description: 'Your order has been confirmed', color: 'text-orange-500' },
+    { id: 'PROCESSING', label: 'Processing', icon: Package, description: 'We are preparing your order', color: 'text-yellow-500' },
+    { id: 'SHIPPED', label: 'Shipped', icon: Truck, description: 'Your order is on the way', color: 'text-blue-500' },
+    { id: 'DELIVERED', label: 'Delivered', icon: Check, description: 'Your order has been delivered', color: 'text-emerald-500' },
   ];
 
   const currentIndex = steps.findIndex(s => s.id === status);
@@ -17,7 +17,10 @@ const OrderTimeline = ({ status, createdAt, updatedAt, timeline = [] }) => {
   if (isCancelled) {
     return (
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 className="font-semibold text-gray-800 mb-4">Order Timeline</h3>
+        <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <Clock size={18} className="text-gray-500" />
+          Order Timeline
+        </h3>
         <div className="text-center py-8">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
             <X size={30} className="text-red-500" />
@@ -31,7 +34,10 @@ const OrderTimeline = ({ status, createdAt, updatedAt, timeline = [] }) => {
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-      <h3 className="font-semibold text-gray-800 mb-6">Order Timeline</h3>
+      <h3 className="font-semibold text-gray-800 mb-6 flex items-center gap-2">
+        <Clock size={18} className="text-emerald-600" />
+        Order Timeline
+      </h3>
       
       <div className="relative">
         {/* Vertical Line */}
@@ -63,7 +69,7 @@ const OrderTimeline = ({ status, createdAt, updatedAt, timeline = [] }) => {
                       {step.label}
                     </p>
                     {isCurrent && (
-                      <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
+                      <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-medium">
                         Current
                       </span>
                     )}
@@ -72,7 +78,8 @@ const OrderTimeline = ({ status, createdAt, updatedAt, timeline = [] }) => {
                     {step.description}
                   </p>
                   {isCurrent && updatedAt && (
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
+                      <Calendar size={12} />
                       {new Date(updatedAt).toLocaleString('en-IN', {
                         day: 'numeric',
                         month: 'short',
