@@ -20,6 +20,12 @@ public class UserService {
      
     public Page<User> getUsersByRole(UserRole role, Pageable pageable) {
         return userRepository.findByRole(role, pageable);
+        
+        
+    }
+    
+    public Page<User> getSellerUsers(Pageable pageable) {
+        return userRepository.findByRole(UserRole.SELLER, pageable);
     }
     
     public Optional<User> findByEmail(String email) {

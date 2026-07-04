@@ -40,6 +40,21 @@ public class UserController {
                         .build()
         );
     }
+    @GetMapping("/admin/sellers")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Page<User>>> getSellerUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ResponseEntity.ok(
+                ApiResponse.<Page<User>>builder()
+                        .success(true)
+                        .message("Seller users fetched successfully")
+                        .data(userService.getSellerUsers(pageable))
+                        .build());
+    }
 
     
     @GetMapping("/admin/{userId}")

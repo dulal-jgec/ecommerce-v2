@@ -65,7 +65,7 @@ export const deleteUser = async (userId) => {
 
 // ============ Sellers ============
 export const getAllSellers = async () => {
-    const response = await apiClient.get("/api/v1/seller/admin");
+    const response = await apiClient.get(SELLER.SELLER_USERS);
     return response.data;
 };
 export const getPendingSellers = async () => {

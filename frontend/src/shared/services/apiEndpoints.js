@@ -23,6 +23,7 @@ export const SELLER = {
   PENDING: '/api/v1/seller/pending',
   APPROVE: (id) => `/api/v1/seller/${id}/approve`,
   REJECT: (id) => `/api/v1/seller/${id}/reject`,
+  SELLER_USERS: "/api/v1/users/admin/sellers",
 };
 
 export const ORDERS = {
