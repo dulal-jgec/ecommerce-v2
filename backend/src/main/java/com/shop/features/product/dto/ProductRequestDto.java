@@ -26,8 +26,8 @@ public class ProductRequestDto {
     @Min(value = 0, message = "Stock cannot be negative")
     private Integer stock;
 
-    @Size(max = 50)
-    private String category;
+    @NotNull
+    private Long categoryId;
 
     @Size(max = 30)
     private String color;

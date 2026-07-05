@@ -3,6 +3,8 @@ package com.shop.features.product.service;
 import com.shop.common.exception.BadRequestException;
 import com.shop.config.SecurityConfig;
 import com.shop.features.address.controller.AddressController;
+import com.shop.features.category.entity.Category;
+import com.shop.features.category.repository.CategoryRepository;
 import com.shop.features.order.controller.OrderController;
 import com.shop.features.product.dto.ProductFilterDto;
 import com.shop.features.product.dto.ProductRequestDto;
@@ -38,6 +40,7 @@ import org.slf4j.LoggerFactory;
 public class ProductServiceImpl implements ProductService {
 
     private final SecurityConfig securityConfig;
+    private final CategoryRepository categoryRepository;
 
  
 
@@ -208,13 +211,20 @@ public class ProductServiceImpl implements ProductService {
         }
         	
 
+        
         product.setName(request.getName());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
         product.setOriginalPrice(request.getOriginalPrice());
         product.setStock(request.getStock());
-        product.setCategory(request.getCategory());
         product.setColor(request.getColor());
+        Category category = categoryRepository
+                .findById(request.getCategoryId())
+                .orElseThrow(() ->
+                        new BadRequestException("Category not found"));
+
+        product.setCategory(category);
+        product.setCategory(category);
         product.setSize(request.getSize());
         
         product.setFeatured(

@@ -18,8 +18,7 @@ public class ProductMapper {
 	        product.setDescription(dto.getDescription());
 	        product.setPrice(dto.getPrice());
 	        product.setStock(dto.getStock());
-	        product.setCategory(dto.getCategory());
-	        product.setColor(dto.getColor());
+ 	        product.setColor(dto.getColor());
 	        product.setSize(dto.getSize());
 
 	        return product;
@@ -37,7 +36,16 @@ public class ProductMapper {
 	            .totalReviews(0)
 	            .price(product.getPrice())
 	            .stock(product.getStock())
-	            .category(product.getCategory())
+	            .categoryId(
+	            	    product.getCategory() != null
+	            	        ? product.getCategory().getId()
+	            	        : null
+	            	)
+	            	.categoryName(
+	            	    product.getCategory() != null
+	            	        ? product.getCategory().getName()
+	            	        : null
+	            	)
 	            .color(product.getColor())
 	            .size(product.getSize())
 	            .featured(product.getFeatured())

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.shop.features.category.entity.Category;
 import com.shop.features.user.entity.User;
 
 @Entity
@@ -50,8 +51,9 @@ public class Product {
     private BigDecimal price;
 
      
-    @Column(length = 50)
-    private String category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     @Column(length = 30)
     private String color;
@@ -84,8 +86,6 @@ public class Product {
     
     @Column(nullable = false)
     private Boolean newArrival = false;
-    
-    
     
     
     @Column(nullable = false)

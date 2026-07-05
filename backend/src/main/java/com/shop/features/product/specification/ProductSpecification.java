@@ -16,14 +16,19 @@ public class ProductSpecification {
 		  return (root,query,cb)->{
 			  var predicates = cb.conjunction();
 			  
-			  if(category!=null && !category.trim().isEmpty()) {
-				  predicates = cb.and(predicates,
-						  cb.equal(
-								    cb.lower(root.get("category")),
-								    category.toLowerCase()
-								));
-						  
-			  }
+			  if (category != null && !category.trim().isEmpty()) {
+
+				    predicates = cb.and(
+				            predicates,
+				            cb.equal(
+				                    cb.lower(
+				                            root.get("category").get("name")
+				                    ),
+				                    category.toLowerCase()
+				            )
+				    );
+				}
+			  
 			  if(minPrice!=null) {
 				  predicates = cb.and(predicates,
 						  cb.greaterThanOrEqualTo(root.get("price"), minPrice)
