@@ -272,7 +272,7 @@ public class OrderServiceImpl implements OrderService {
 	                        .customerName(item.getOrder().getShippingFullName())
 	                        .customerPhone(item.getOrder().getShippingPhoneNumber())
 	                        .address(item.getOrder().getShippingAddressLine1())
-	                        .status(item.getOrder().getStatus().name())
+	                        .status(item.getStatus().name())
 	                        .build();
 	            })
 	            .toList();
