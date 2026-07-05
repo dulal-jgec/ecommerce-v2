@@ -91,6 +91,12 @@ public class ProductServiceImpl implements ProductService {
         
         // DTO → Entity
         Product product = ProductMapper.toEntity(request);
+        Category category = categoryRepository
+                .findById(request.getCategoryId())
+                .orElseThrow(() ->
+                        new BadRequestException("Category not found"));
+
+        product.setCategory(category);
         product.setOriginalPrice(request.getOriginalPrice());
         product.setSeller(seller);
         
@@ -223,7 +229,6 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() ->
                         new BadRequestException("Category not found"));
 
-        product.setCategory(category);
         product.setCategory(category);
         product.setSize(request.getSize());
         
