@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.shop.features.user.entity.User;
 
@@ -19,6 +21,13 @@ public class Product {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "seller_id")
+	
+	@OneToMany(
+	        mappedBy = "product",
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true
+	)
+	private List<ProductVariant> variants = new ArrayList<>();
 	private User seller;
 
     @Id

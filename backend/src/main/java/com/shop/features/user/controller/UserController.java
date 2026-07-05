@@ -1,4 +1,3 @@
-// src/main/java/com/shop/features/user/controller/UserController.java
 package com.shop.features.user.controller;
 
 import com.shop.common.dto.ApiResponse;
