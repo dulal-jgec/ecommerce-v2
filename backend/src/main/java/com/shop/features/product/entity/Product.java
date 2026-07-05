@@ -21,6 +21,7 @@ public class Product {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "seller_id")
+	private User seller;
 	
 	@OneToMany(
 	        mappedBy = "product",
@@ -28,7 +29,9 @@ public class Product {
 	        orphanRemoval = true
 	)
 	private List<ProductVariant> variants = new ArrayList<>();
-	private User seller;
+	
+	
+	
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
