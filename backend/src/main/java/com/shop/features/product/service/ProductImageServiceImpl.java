@@ -81,7 +81,12 @@ public class ProductImageServiceImpl implements ProductImageService {
         image.setColor(color);
         image.setImageUrl(imageUrl);
         image.setProduct(product);
+        
+        boolean hasMainImage =
+                productImageRepository.existsByProductIdAndMainImageTrue(productId);
 
+        image.setMainImage(!hasMainImage);
+        
         ProductImage saved =
                 productImageRepository.save(image);
 
@@ -89,6 +94,7 @@ public class ProductImageServiceImpl implements ProductImageService {
                 .id(saved.getId())
                 .color(saved.getColor())
                 .imageUrl(saved.getImageUrl())
+                .mainImage(saved.getMainImage())
                 .build();
     }
     
@@ -180,5 +186,59 @@ public class ProductImageServiceImpl implements ProductImageService {
                     files.get(i)
             );
         }
+        
+        
+    }
+    @Override
+    public ProductImageResponseDto setMainImage(Long imageId) {
+
+        Authentication auth =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+        String email = auth.getName();
+
+        User seller =
+                userRepository
+                        .findByEmail(email)
+                        .orElseThrow();
+
+        ProductImage image =
+                productImageRepository
+                        .findById(imageId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException("Image not found"));
+
+        Product product = image.getProduct();
+
+        if (!product.getSeller().getId().equals(seller.getId())
+                && auth.getAuthorities().stream()
+                        .noneMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+
+            throw new BadRequestException(
+                    "You can manage only your own products"
+            );
+        }
+
+        List<ProductImage> images =
+                productImageRepository.findByProductId(product.getId());
+
+        for (ProductImage img : images) {
+
+            img.setMainImage(false);
+
+        }
+
+        image.setMainImage(true);
+
+        productImageRepository.saveAll(images);
+
+        return ProductImageResponseDto.builder()
+                .id(image.getId())
+                .color(image.getColor())
+                .imageUrl(image.getImageUrl())
+                .mainImage(image.getMainImage())
+                .build();
     }
 }

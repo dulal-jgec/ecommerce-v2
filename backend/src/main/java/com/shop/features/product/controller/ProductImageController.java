@@ -98,4 +98,21 @@ public class ProductImageController {
                         .build()
         );
     }
+    @PreAuthorize("hasAnyRole('ADMIN','SELLER')")
+    @PatchMapping("/images/{imageId}/main")
+    public ResponseEntity<ApiResponse<?>> setMainImage(
+            @PathVariable Long imageId
+    ) {
+
+        ProductImageResponseDto response =
+                productImageService.setMainImage(imageId);
+
+        return ResponseEntity.ok(
+                ApiResponse.builder()
+                        .success(true)
+                        .message("Main image updated successfully")
+                        .data(response)
+                        .build()
+        );
+    }
 }

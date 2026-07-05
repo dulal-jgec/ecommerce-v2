@@ -10,4 +10,5 @@ public class ProductImageResponseDto {
     private Long id;
     private String color;
     private String imageUrl;
+    private Boolean mainImage;
 }

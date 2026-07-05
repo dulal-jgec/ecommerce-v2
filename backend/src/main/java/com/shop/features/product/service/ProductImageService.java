@@ -19,4 +19,6 @@ public interface ProductImageService {
             List<String> colors,
             List<MultipartFile> files
     );
+    ProductImageResponseDto setMainImage(Long imageId);
+    
 }
