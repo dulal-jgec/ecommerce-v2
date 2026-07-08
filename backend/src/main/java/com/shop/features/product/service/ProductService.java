@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import com.shop.features.product.dto.MarketingUpdateRequestDto;
 import com.shop.features.product.dto.ProductFilterDto;
 import com.shop.features.product.dto.ProductRequestDto;
 import com.shop.features.product.dto.ProductResponseDto;
@@ -38,4 +39,9 @@ public interface ProductService {
     List<ProductResponseDto> getTrendingProducts();
     
     List<ProductResponseDto> getMyProducts();
+    
+    ProductResponseDto updateMarketing(
+    	    Long productId,
+    	    MarketingUpdateRequestDto request
+    	);
 }

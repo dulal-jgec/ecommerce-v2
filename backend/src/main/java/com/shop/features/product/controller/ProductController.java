@@ -1,6 +1,7 @@
 package com.shop.features.product.controller;
 
 import com.shop.common.dto.ApiResponse;
+import com.shop.features.product.dto.MarketingUpdateRequestDto;
 import com.shop.features.product.dto.ProductFilterDto;
 import com.shop.features.product.dto.ProductRequestDto;
 import com.shop.features.product.dto.ProductResponseDto;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     private final ProductService productService;
+    
 
     @PreAuthorize(
     		 "hasAnyRole('ADMIN','SELLER')"
@@ -183,4 +185,24 @@ public class ProductController {
                 productService.getTrendingProducts()
         );
     }
+    
+    @PatchMapping("/{id}/marketing")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<ProductResponseDto>> updateMarketing(
+            @PathVariable Long id,
+            @RequestBody MarketingUpdateRequestDto request
+    ) {
+
+        ProductResponseDto response =
+                productService.updateMarketing(id, request);
+
+        return ResponseEntity.ok(
+                ApiResponse.<ProductResponseDto>builder()
+                        .success(true)
+                        .message("Marketing updated successfully")
+                        .data(response)
+                        .build()
+        );
+    }
+    
 }

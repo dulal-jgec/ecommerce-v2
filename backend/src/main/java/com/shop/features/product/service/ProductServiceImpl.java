@@ -6,6 +6,7 @@ import com.shop.features.address.controller.AddressController;
 import com.shop.features.category.entity.Category;
 import com.shop.features.category.repository.CategoryRepository;
 import com.shop.features.order.controller.OrderController;
+import com.shop.features.product.dto.MarketingUpdateRequestDto;
 import com.shop.features.product.dto.ProductFilterDto;
 import com.shop.features.product.dto.ProductRequestDto;
 import com.shop.features.product.dto.ProductResponseDto;
@@ -338,6 +339,26 @@ public class ProductServiceImpl implements ProductService {
     			.stream()
     			.map(ProductMapper::toResponse)
     			.toList();
+    }
+    
+    @Override
+    public ProductResponseDto updateMarketing(
+            Long productId,
+            MarketingUpdateRequestDto request
+    ) {
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() ->
+                        new BadRequestException("Product not found"));
+
+        product.setFeatured(Boolean.TRUE.equals(request.getFeatured()));
+        product.setNewArrival(Boolean.TRUE.equals(request.getNewArrival()));
+        product.setBestSeller(Boolean.TRUE.equals(request.getBestSeller()));
+        product.setTrending(Boolean.TRUE.equals(request.getTrending()));
+
+        Product saved = productRepository.save(product);
+
+        return ProductMapper.toResponse(saved);
     }
     
     }

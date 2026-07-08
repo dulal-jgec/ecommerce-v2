@@ -19,8 +19,6 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    //owner
     
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -33,7 +31,6 @@ public class Order {
             orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
-    //final price snapshot
     
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPrice;
