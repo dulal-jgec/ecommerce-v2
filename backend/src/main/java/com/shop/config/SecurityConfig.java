@@ -68,6 +68,8 @@ public class SecurityConfig {
 	    			    "/api/v1/products/*/images/batch",
 	    			    "/api/v1/products/images/*"
 	    			).hasAnyRole("SELLER", "ADMIN")
+	    		.requestMatchers(HttpMethod.PATCH, "/api/v1/products/**")
+	    		.hasAnyRole("ADMIN", "SELLER")
 	    		
  	    		.requestMatchers(
 	    		        "/api/v1/cart/**",            
