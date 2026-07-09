@@ -115,6 +115,7 @@ public class SellerProfileServiceImpl
                                 .firstName(profile.getUser().getFirstName())
                                 .lastName(profile.getUser().getLastName())
                                 .phoneNumber(profile.getUser().getPhoneNumber())
+                                .role(profile.getUser().getRole().name()) 
                                 .appliedAt(profile.getAppliedAt())
                                 .build())
                 .toList();

@@ -26,4 +26,5 @@ private String logo;
 private String status;
 
 private LocalDateTime appliedAt;
+private String role;
 }
