@@ -48,8 +48,15 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User user = new User();
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        user.setPhoneNumber(request.getPhoneNumber());
+
         user.setRole(UserRole.BUYER);
 
         
@@ -61,28 +68,19 @@ public class AuthServiceImpl implements AuthService {
 
         cartRepository.save(cart);
     
-        if("SELLER".equalsIgnoreCase(request.getRole())) {
+        if ("SELLER".equalsIgnoreCase(request.getRole())) {
 
-            SellerProfile profile =
-                    new SellerProfile();
+            if (request.getShopName() == null || request.getShopName().isBlank()) {
+                throw new BadRequestException("Shop name is required");
+            }
+
+            SellerProfile profile = new SellerProfile();
 
             profile.setUser(savedUser);
-
-            profile.setShopName(
-            	    request.getShopName()
-            	);
-
-            	profile.setDescription(
-            	    request.getDescription()
-            	);
-
-            	profile.setLogo(
-            	    request.getLogo()
-            	);
-
-            profile.setStatus(
-                    SellerStatus.PENDING
-            );
+            profile.setShopName(request.getShopName());
+            profile.setDescription(request.getDescription());
+            profile.setLogo(request.getLogo());
+            profile.setStatus(SellerStatus.PENDING);
 
             sellerProfileRepository.save(profile);
         }
