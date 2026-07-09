@@ -1,6 +1,7 @@
 package com.shop.features.user.controller;
 
 import com.shop.common.dto.ApiResponse;
+import com.shop.features.user.dto.UserProfileResponseDto;
 import com.shop.features.user.entity.User;
 import com.shop.features.user.entity.UserRole;
 import com.shop.features.user.service.UserService;
@@ -126,17 +127,20 @@ public class UserController {
 
      
     @GetMapping("/profile")
-    public ResponseEntity<ApiResponse<User>> getMyProfile(
+    public ResponseEntity<ApiResponse<UserProfileResponseDto>> getMyProfile(
             Authentication authentication
     ) {
+
         String email = authentication.getName();
-         
-        
+
+        UserProfileResponseDto response =
+                userService.getMyProfile(email);
+
         return ResponseEntity.ok(
-                ApiResponse.<User>builder()
+                ApiResponse.<UserProfileResponseDto>builder()
                         .success(true)
                         .message("Profile fetched successfully")
-                        // .data(user)
+                        .data(response)
                         .build()
         );
     }

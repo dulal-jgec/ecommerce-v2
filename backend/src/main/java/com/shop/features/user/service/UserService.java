@@ -1,5 +1,6 @@
 package com.shop.features.user.service;
 
+import com.shop.features.user.dto.UserProfileResponseDto;
 import com.shop.features.user.entity.User;
 import com.shop.features.user.entity.UserRole;
 import com.shop.features.user.repository.UserRepository;
@@ -66,6 +67,23 @@ public class UserService {
     
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+    
+    public UserProfileResponseDto getMyProfile(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return UserProfileResponseDto.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole().name())
+                .profileImage(user.getProfileImage())
+                .createdAt(user.getCreatedAt())
+                .build();
     }
 
 

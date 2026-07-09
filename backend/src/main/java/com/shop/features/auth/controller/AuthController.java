@@ -2,7 +2,7 @@ package com.shop.features.auth.controller;
 
 import java.lang.module.ModuleDescriptor.Builder;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -97,19 +97,21 @@ public class AuthController {
 	
 	@GetMapping("/me")
 	public ResponseEntity<ApiResponse<User>> getCurrentUser(
-			Authentication authentication
+	        Authentication authentication
 	) {
-		String email = authentication.name(); 
-		User user = userService.findByEmail(email)
-				.orElseThrow(() -> new RuntimeException("User not found"));
-		
-		return ResponseEntity.ok(
-				ApiResponse.<User>builder()
-						.success(true)
-						.message("User fetched successfully")
-						.data(user)
-						.build()
-		);
+
+	    String email = authentication.getName();
+
+	    User user = userService.findByEmail(email)
+	            .orElseThrow(() -> new RuntimeException("User not found"));
+
+	    return ResponseEntity.ok(
+	            ApiResponse.<User>builder()
+	                    .success(true)
+	                    .message("User fetched successfully")
+	                    .data(user)
+	                    .build()
+	    );
 	}
 	
 	
