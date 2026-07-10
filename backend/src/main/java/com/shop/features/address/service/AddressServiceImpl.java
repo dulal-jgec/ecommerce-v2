@@ -32,12 +32,12 @@ public class AddressServiceImpl implements AddressService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found"));
 
-        // Create entity
+         
         Address address = AddressMapper.toEntity(request);
 
         address.setUser(user);
 
-        // Default address handling
+        
         if (Boolean.TRUE.equals(request.getDefaultAddress())) {
 
             addressRepository
@@ -155,39 +155,5 @@ public class AddressServiceImpl implements AddressService {
                 addressRepository.save(address);
 
         return AddressMapper.toResponse(updated);
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    }   
 }

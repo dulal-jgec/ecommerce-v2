@@ -20,7 +20,7 @@ public class BannerController {
 
     private final BannerService bannerService;
 
-    // ================= PUBLIC =================
+     
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<BannerResponseDto>>> getActiveBanners() {
@@ -34,7 +34,7 @@ public class BannerController {
         );
     }
 
-    // ================= ADMIN =================
+     
 
     @GetMapping("/admin")
     public ResponseEntity<ApiResponse<List<BannerResponseDto>>> getAllBanners() {

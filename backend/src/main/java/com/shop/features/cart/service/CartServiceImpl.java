@@ -30,20 +30,20 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponseDto addToCart(String email, AddToCartRequestDto request) {
 
-        //find user
+         
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        //find product
+        
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        //stock validation
+         
         if (product.getStock() < request.getQuantity()) {
             throw new BadRequestException("Insufficient stock");
         }
 
-        //find/create cart findByuserId
+         
         Cart cart = cartRepository.findByUserId(user.getId())
                 .orElseGet(() -> {
                     Cart newCart = new Cart();
@@ -51,7 +51,7 @@ public class CartServiceImpl implements CartService {
                     return cartRepository.save(newCart);
                 });
 
-        //check existing cart item
+         
         CartItem existingItem = cart.getItems()
                 .stream()
                 .filter(item ->
