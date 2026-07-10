@@ -11,13 +11,5 @@ public class HealthController {
         return "Backend Running";
     }
 
-    @RestController
-    public class HomeController {
-
-        @GetMapping("/")
-        public String home() {
-            return "ShopLy Backend Running";
-        }
-
-    }
+    
 }
