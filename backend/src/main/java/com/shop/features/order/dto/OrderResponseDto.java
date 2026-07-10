@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.shop.features.order.entity.OrderItemStatus;
 import com.shop.features.order.entity.OrderStatus;
 
 import lombok.Builder;
@@ -33,4 +34,6 @@ public class OrderResponseDto {
     private String shippingState;
     private String shippingPostalCode;
     private String shippingCountry;
+    
+    private OrderItemStatus currentStatus;
 }
