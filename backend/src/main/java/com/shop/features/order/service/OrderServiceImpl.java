@@ -371,7 +371,69 @@ public class OrderServiceImpl implements OrderService {
 
 	    orderItemRepository.save(item);
 
+	    updateOverallOrderStatus(item.getOrder());
+
 	    return OrderMapper.toSellerResponseDto(item);
 	}
+	
+private void updateOverallOrderStatus(Order order) {
+
+    List<OrderItem> items = order.getItems();
+
+    boolean allPlaced =
+            items.stream().allMatch(i -> i.getStatus() == OrderItemStatus.PLACED);
+
+    boolean allPaid =
+            items.stream().allMatch(i -> i.getStatus() == OrderItemStatus.PAID);
+
+    boolean allShipped =
+            items.stream().allMatch(i -> i.getStatus() == OrderItemStatus.SHIPPED);
+
+    boolean allDelivered =
+            items.stream().allMatch(i -> i.getStatus() == OrderItemStatus.DELIVERED);
+
+    boolean allCancelled =
+            items.stream().allMatch(i -> i.getStatus() == OrderItemStatus.CANCELLED);
+
+    if (allDelivered) {
+        order.setStatus(OrderStatus.DELIVERED);
+    }
+
+    else if (allShipped) {
+        order.setStatus(OrderStatus.SHIPPED);
+    }
+
+    else if (allPaid) {
+        order.setStatus(OrderStatus.PAID);
+    }
+
+    else if (allPlaced) {
+        order.setStatus(OrderStatus.PLACED);
+    }
+
+    else if (allCancelled) {
+        order.setStatus(OrderStatus.CANCELLED);
+    }
+
+    else {
+
+        if (items.stream().anyMatch(i -> i.getStatus() == OrderItemStatus.SHIPPED)) {
+            order.setStatus(OrderStatus.SHIPPED);
+        }
+
+        else if (items.stream().anyMatch(i -> i.getStatus() == OrderItemStatus.PAID)) {
+            order.setStatus(OrderStatus.PAID);
+        }
+
+        else {
+            order.setStatus(OrderStatus.PLACED);
+        }
+    }
+
+    orderRepository.save(order);
+}
+	
+	
+	
 }
  
