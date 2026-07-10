@@ -1,67 +1,144 @@
-// src/features/admin/components/CategoriesTable.jsx
-import React from 'react';
-import { Edit, Trash2, Copy } from 'lucide-react';
+import React from "react";
+import { 
+  Edit, 
+  Trash2, 
+  FolderTree,
+  Image as ImageIcon,
+  Check,
+  X,
+  Package
+} from "lucide-react";
 
-const CategoriesTable = ({ categories }) => {
-  const getStatusBadge = (status) => {
+const CategoryTable = ({ categories, onEdit, onDelete }) => {
+  const getStatusBadge = (active) => {
+    if (active !== false) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+          <Check size={12} />
+          Active
+        </span>
+      );
+    }
     return (
-      <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-        status === 'Active' 
-          ? 'bg-emerald-50 text-emerald-700' 
-          : 'bg-red-50 text-red-700'
-      }`}>
-        {status}
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+        <X size={12} />
+        Inactive
       </span>
     );
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full">
-        <thead>
-          <tr className="bg-gray-50 border-b border-gray-100">
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Parent</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subcategories</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Products</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-50">
-          {categories.map((category) => (
-            <tr key={category.id} className="hover:bg-gray-50/50 transition">
-              <td className="px-6 py-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{category.icon}</span>
-                  <span className="font-medium text-sm text-gray-800">{category.name}</span>
+    <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-lg border border-white/50 overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-gradient-to-r from-indigo-50/50 to-purple-50/50 border-b border-gray-200/50">
+              <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                <div className="flex items-center gap-2">
+                  <FolderTree size={14} />
+                  Category
                 </div>
-              </td>
-              <td className="px-6 py-4 text-sm text-gray-500">{category.slug}</td>
-              <td className="px-6 py-4 text-sm text-gray-500">{category.parent || '-'}</td>
-              <td className="px-6 py-4 text-sm text-gray-600">{category.subcategories}</td>
-              <td className="px-6 py-4 text-sm text-gray-600">{category.products}</td>
-              <td className="px-6 py-4">{getStatusBadge(category.status)}</td>
-              <td className="px-6 py-4 text-right">
-                <div className="flex items-center justify-end gap-2">
-                  <button className="p-1.5 hover:bg-gray-100 rounded-lg transition text-gray-400 hover:text-indigo-600">
-                    <Edit size={16} />
-                  </button>
-                  <button className="p-1.5 hover:bg-gray-100 rounded-lg transition text-gray-400 hover:text-blue-600">
-                    <Copy size={16} />
-                  </button>
-                  <button className="p-1.5 hover:bg-gray-100 rounded-lg transition text-gray-400 hover:text-red-600">
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              </td>
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                Image
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-gray-100/50">
+            {categories.map((category) => (
+              <tr key={category.id} className="hover:bg-white/50 transition group">
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-white shadow-sm flex-shrink-0">
+                      {category.imageUrl ? (
+                        <img
+                          src={category.imageUrl}
+                          alt={category.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <ImageIcon size={20} className="text-gray-300" />
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm text-gray-800 line-clamp-1">
+                        {category.name}
+                      </p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  {category.imageUrl ? (
+                    <img
+                      src={category.imageUrl}
+                      alt={category.name}
+                      className="w-12 h-12 rounded-lg object-cover shadow-sm"
+                    />
+                  ) : (
+                    <span className="text-sm text-gray-400">No image</span>
+                  )}
+                </td>
+                <td className="px-6 py-4">
+                  {getStatusBadge(category.active)}
+                </td>
+                <td className="px-6 py-4 text-right">
+                  <div className="flex items-center justify-end gap-1">
+                    <button
+                      onClick={() => onEdit && onEdit(category)}
+                      className="p-2 hover:bg-indigo-50 rounded-xl transition text-gray-400 hover:text-indigo-600 group-hover:scale-110"
+                      title="Edit Category"
+                    >
+                      <Edit size={18} />
+                    </button>
+                    <button
+                      onClick={() => onDelete && onDelete(category)}
+                      className="p-2 hover:bg-red-50 rounded-xl transition text-gray-400 hover:text-red-600 group-hover:scale-110"
+                      title="Delete Category"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+
+            {categories.length === 0 && (
+              <tr>
+                <td colSpan={4} className="px-6 py-16 text-center">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center shadow-inner">
+                      <FolderTree size={48} className="text-gray-300" />
+                    </div>
+                    <div>
+                      <p className="text-gray-500 font-bold text-xl">No categories found</p>
+                      <p className="text-sm text-gray-400 mt-1">Add your first category to get started</p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {categories.length > 0 && (
+        <div className="px-6 py-4 border-t border-gray-100/50 flex items-center justify-between bg-gradient-to-r from-gray-50/50 to-white/50">
+          <p className="text-sm text-gray-500 flex items-center gap-2">
+            <FolderTree size={14} className="text-gray-400" />
+            Showing <span className="font-semibold text-gray-700">{categories.length}</span> categories
+          </p>
+        </div>
+      )}
     </div>
   );
 };
 
-export default CategoriesTable;
+export default CategoryTable;

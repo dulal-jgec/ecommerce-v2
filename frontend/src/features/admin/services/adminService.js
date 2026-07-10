@@ -3,34 +3,80 @@ import { USER, SELLER, ORDERS, PRODUCT, CATEGORY } from '../../../shared/service
 
 // ============ Dashboard Stats ============
 export const getDashboardStats = async () => {
+  const stats = {
+    totalUsers: 0,
+    totalSellers: 0,
+    totalProducts: 0,
+    totalOrders: 0,
+    totalRevenue: 0,
+  };
+
+  // ===== Users =====
   try {
-    const [ordersRes, sellersRes, productsRes, usersRes] = await Promise.all([
-      apiClient.get(ORDERS.ADMIN_ALL),
-      apiClient.get(SELLER.PENDING),
-      apiClient.get(PRODUCT.ALL, { params: { page: 0, size: 1 } }),
-      apiClient.get(USER.ADMIN_ALL, { params: { page: 0, size: 1 } }),
-    ]);
+    const res = await apiClient.get(USER.ADMIN_ALL, {
+      params: {
+        role: "BUYER",
+        page: 0,
+        size: 1,
+      },
+    });
 
-    const orders = ordersRes.data.data?.content || ordersRes.data.data || [];
-    const totalRevenue = orders.reduce((sum, o) => sum + (o.total || 0), 0);
-
-    return {
-      totalOrders: orders.length,
-      totalRevenue: totalRevenue,
-      pendingSellers: sellersRes.data.data?.length || 0,
-      totalProducts: productsRes.data.data?.totalElements || productsRes.data.data?.length || 0,
-      totalUsers: usersRes.data.data?.totalElements || usersRes.data.data?.length || 0,
-    };
-  } catch (error) {
-    console.error('Error fetching dashboard stats:', error);
-    return {
-      totalOrders: 0,
-      totalRevenue: 0,
-      pendingSellers: 0,
-      totalProducts: 0,
-      totalUsers: 0,
-    };
+    stats.totalUsers = res.data.data?.totalElements || 0;
+  } catch (err) {
+     
   }
+
+  // ===== Sellers =====
+  try {
+    const res = await apiClient.get(USER.ADMIN_ALL, {
+      params: {
+        role: "SELLER",
+        page: 0,
+        size: 1,
+      },
+    });
+
+    stats.totalSellers = res.data.data?.totalElements || 0;
+  } catch (err) {
+    
+  }
+
+  // ===== Products =====
+  try {
+    const res = await apiClient.get(PRODUCT.ALL, {
+      params: {
+        page: 0,
+        size: 1,
+      },
+    });
+
+    stats.totalProducts = res.data.data?.totalElements || 0;
+  } catch (err) {
+     
+  }
+
+  // ===== Orders =====
+  try {
+    const res = await apiClient.get(ORDERS.ADMIN_ALL);
+
+    const orders =
+      res.data.data?.content ||
+      res.data.data ||
+      [];
+
+    stats.totalOrders = orders.length;
+
+    stats.totalRevenue = orders.reduce(
+      (sum, order) => sum + (order.total || 0),
+      0
+    );
+  } catch (err) {
+     
+  }
+
+   
+
+  return stats;
 };
 
 // ============ Users ============
@@ -65,7 +111,7 @@ export const deleteUser = async (userId) => {
 
 // ============ Sellers ============
 export const getAllSellers = async () => {
-    const response = await apiClient.get(SELLER.SELLER_USERS);
+    const response = await apiClient.get(SELLER.ALL);
     return response.data;
 };
 export const getPendingSellers = async () => {
@@ -115,7 +161,7 @@ export const deleteProduct = async (id) => {
 };
 
 // ============ Categories ============
-export const getAllCategories = async () => {
+export const getCategories = async () => {
   const response = await apiClient.get(CATEGORY.ALL);
   return response.data.data || [];
 };
@@ -152,4 +198,14 @@ export const getRevenueData = async () => {
     console.error('Error fetching revenue data:', error);
     return [];
   }
+};
+
+
+export const updateMarketing = async (productId, data) => {
+  const response = await apiClient.patch(
+    PRODUCT.MARKETING(productId),  
+    data
+  );
+
+  return response.data.data;
 };

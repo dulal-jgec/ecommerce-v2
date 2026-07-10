@@ -1,12 +1,10 @@
-// src/features/seller/components/ProductForm.jsx
-import React from 'react';
+import React from "react";
 
-const ProductForm = ({ productData, setProductData, isEdit = false }) => {
-  const categories = [
-    'Electronics', 'Clothing', 'Food & Beverages', 
-    'Home & Living', 'Beauty', 'Books', 'Toys', 'Sports'
-  ];
-
+const ProductForm = ({
+  productData,
+  setProductData,
+  categories = [],
+}) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProductData({ ...productData, [name]: value });
@@ -50,14 +48,16 @@ const ProductForm = ({ productData, setProductData, isEdit = false }) => {
           Category <span className="text-red-500">*</span>
         </label>
         <select
-          name="category"
-          value={productData.category}
+          name="categoryId"
+          value={productData.categoryId}
           onChange={handleChange}
-          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition"
         >
           <option value="">Select Category</option>
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
+
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
           ))}
         </select>
       </div>

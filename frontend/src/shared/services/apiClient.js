@@ -1,7 +1,7 @@
 // src/shared/services/apiClient.js
 import axios from 'axios';
-import { API_BASE_URL } from './apiEndpoints';
-import { tokenManager } from '../utils/tokenManagerr';
+import { API_BASE_URL, AUTH } from "./apiEndpoints";
+import { tokenManager } from '../utils/tokenManager';
 
 
 // নতুন instance তৈরি করুন
@@ -25,7 +25,7 @@ apiClient.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    console.log("🚀 Request:", {
+    console.log("Request:", {
       url: config.url,
       method: config.method,
       data: config.data,
@@ -39,30 +39,85 @@ apiClient.interceptors.request.use(
   }
 );
 
+
+const refreshAccessToken = async () => {
+  const refreshToken = tokenManager.getRefreshToken();
+
+  if (!refreshToken) {
+    throw new Error("No refresh token");
+  }
+
+  const response = await axios.post(
+    `${API_BASE_URL}${AUTH.REFRESH}`,
+    {
+      refreshToken,
+    }
+  );
+
+  return response.data.data;
+};
+
 // Response interceptor
 apiClient.interceptors.response.use(
   (response) => {
-    console.log('✅ Response:', {
+    console.log("Response:", {
       status: response.status,
-      data: response.data
+      data: response.data,
     });
+
     return response;
   },
-  (error) => {
-    console.error('❌ Response Error:', {
+
+  async (error) => {
+
+    const originalRequest = error.config || {};
+
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry
+    ) {
+
+      originalRequest._retry = true;
+
+      try {
+
+         
+
+        const tokens = await refreshAccessToken();
+
+        tokenManager.setAccessToken(tokens.accessToken);
+        tokenManager.setRefreshToken(tokens.refreshToken);
+
+        originalRequest.headers.Authorization =
+          `Bearer ${tokens.accessToken}`;
+
+        
+
+        return apiClient(originalRequest);
+
+      } catch (refreshError) {  
+        tokenManager.clearAll();
+
+        window.location.href = "/signin";
+
+        return Promise.reject(refreshError);
+      }
+    }
+
+    console.error("Response Error:", {
       message: error.message,
       response: error.response?.data,
-      status: error.response?.status
+      status: error.response?.status,
     });
-    
-    // যদি CORS error হয়
-    if (error.message === 'Network Error') {
+
+    if (error.message === "Network Error") {
       return Promise.reject({
-        message: 'Cannot connect to server. Please check your internet or CORS settings.',
-        isCorsError: true
+        message:
+          "Cannot connect to server. Please check your internet connection.",
+        isCorsError: true,
       });
     }
-    
+
     return Promise.reject(error);
   }
 );

@@ -26,17 +26,14 @@ export const tokenManager = {
   setUser: (user) => localStorage.setItem(USER_KEY, JSON.stringify(user)),
   removeUser: () => localStorage.removeItem(USER_KEY),
   
-  // ✅ Clear All - Properly
+  // Clear All - Properly
   clearAll: () => {
-    console.log('🗑️ Clearing all tokens and user data');
+    
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     
-    // Verify cleared
-    console.log('✅ AccessToken cleared:', !localStorage.getItem(TOKEN_KEY));
-    console.log('✅ RefreshToken cleared:', !localStorage.getItem(REFRESH_TOKEN_KEY));
-    console.log('✅ User cleared:', !localStorage.getItem(USER_KEY));
+    
   },
   
   // Check if authenticated

@@ -1,7 +1,6 @@
-// src/features/auth/services/authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { authService } from './authService';
-import { tokenManager } from '../../../shared/utils/tokenManagerr';
+import { tokenManager } from '../../../shared/utils/tokenManager';
 
 // Login
 export const loginUser = createAsyncThunk(
@@ -14,24 +13,49 @@ export const loginUser = createAsyncThunk(
     return result.data;
   }
 );
+
+export const getProfile = createAsyncThunk(
+  "auth/profile",
+  
+  async (_, { rejectWithValue }) => {
+    const result = await authService.getProfile();
+
+    if (!result.success) {
+      return rejectWithValue(result.message);
+    }
+
+    return result.data;
+  }
+);
  
+
+export const registerUser = createAsyncThunk(
+  "auth/register",
+  async (userData, { rejectWithValue }) => {
+    const result = await authService.register(userData);
+
+    if (!result.success) {
+      return rejectWithValue(result.message);
+    }
+
+    return result.data;
+  }
+);
+
 export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
       const refreshToken = tokenManager.getRefreshToken();
-      
-      console.log('🔄 Logout called with refreshToken:', refreshToken);
-      
-       
+
       if (refreshToken) {
         const result = await authService.logout(refreshToken);
         
         if (!result.success) {
-          console.warn('⚠️ Logout API failed but continuing...');
+          console.warn('Logout API failed but continuing...');
         }
       } else {
-        console.warn('⚠️ No refresh token found for logout');
+        console.warn(' No refresh token found for logout');
       }
       
        
@@ -39,7 +63,7 @@ export const logoutUser = createAsyncThunk(
       
       return true;
     } catch (error) {
-      console.error('❌ Logout error:', error);
+      console.error(' Logout error:', error);
        
       tokenManager.clearAll();
       return true;
@@ -76,7 +100,7 @@ const authSlice = createSlice({
       state.isAuthenticated = tokenManager.isAuthenticated();
       state.user = tokenManager.getUser();
     },
-    // ✅ Manual Logout - Instant State Update
+     
     manualLogout: (state) => {
       console.log('🔄 Manual logout called');
       state.isAuthenticated = false;
@@ -92,25 +116,42 @@ const authSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isAuthenticated = true;
-        state.success = true;
-        
-        const { accessToken, refreshToken, user } = action.payload;
-        
-        tokenManager.setAccessToken(accessToken);
-        tokenManager.setRefreshToken(refreshToken);
-        tokenManager.setUser(user);
-        
-        state.user = user;
-      })
+.addCase(loginUser.fulfilled, (state, action) => {
+  state.isLoading = false;
+  state.isAuthenticated = true;
+  state.success = true;
+
+  const { accessToken, refreshToken, user } = action.payload;
+
+  tokenManager.setAccessToken(accessToken);
+  tokenManager.setRefreshToken(refreshToken);
+  tokenManager.setUser(user);
+
+  state.user = user;
+})
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isAuthenticated = false;
         state.error = action.payload || 'Login failed';
       })
-      // ✅ Logout
+
+
+.addCase(getProfile.pending, (state) => {
+    state.isLoading = true;
+})
+
+.addCase(getProfile.fulfilled, (state, action) => {
+    state.isLoading = false;
+    state.user = action.payload;
+})
+
+.addCase(getProfile.rejected, (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+})
+
+
+      // Logout
       .addCase(logoutUser.pending, (state) => {
         state.isLoading = true;
       })

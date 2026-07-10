@@ -42,9 +42,16 @@ export const useOrders = () => {
     }
   };
 
-  useEffect(() => {
+useEffect(() => {
+  loadOrders();
+
+  const interval = setInterval(() => {
     loadOrders();
-  }, [page]);
+  }, 10000);
+
+  return () => clearInterval(interval);
+
+}, [page]);
 
   return { orders, loading, error, page, totalPages, setPage, getOrder, cancel, loadOrders };
 };

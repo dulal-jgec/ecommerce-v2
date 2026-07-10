@@ -1,47 +1,192 @@
 @import "tailwindcss";
 
-
- @import url("https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css");
+@import url("https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css");
 @import url("https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css");
 
+/* ==========================================================
+   SHOPLY DESIGN SYSTEM
+========================================================== */
+
+:root {
+
+  /* Brand Colors */
+  --color-primary: #059669;
+  --color-primary-hover: #047857;
+  --color-primary-light: #d1fae5;
+
+  /* Secondary */
+  --color-secondary: #facc15;
+  --color-secondary-hover: #eab308;
+
+  /* Accent */
+  --color-accent: #ec4899;
+  --color-accent-light: #fce7f3;
+
+  /* Background */
+  --color-background: #f8faf8;
+  --color-surface: #ffffff;
+
+  /* Text */
+  --color-text: #1f2937;
+  --color-text-light: #6b7280;
+
+  /* Border */
+  --color-border: #e5e7eb;
+
+  /* Shadow */
+  --shadow-brand: rgba(5,150,105,.18);
+}
+
+/* ==========================================================
+   BASE
+========================================================== */
 
 @layer base {
-  body {
-    @apply antialiased;
+
+  *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
   }
+
+  html{
+    scroll-behavior:smooth;
+  }
+
+  body{
+    @apply antialiased;
+    background:var(--color-background);
+    color:var(--color-text);
+    font-family:Inter,system-ui,sans-serif;
+  }
+
+  a{
+    text-decoration:none;
+  }
+
+  button{
+    cursor:pointer;
+  }
+
 }
+
+/* ==========================================================
+   BRAND UTILITY CLASSES
+========================================================== */
+
+.bg-brand{
+  background:var(--color-primary);
+}
+
+.bg-brand-hover:hover{
+  background:var(--color-primary-hover);
+}
+
+.bg-brand-light{
+  background:var(--color-primary-light);
+}
+
+.bg-secondary{
+  background:var(--color-secondary);
+}
+
+.bg-secondary-hover:hover{
+  background:var(--color-secondary-hover);
+}
+
+.bg-accent{
+  background:var(--color-accent);
+}
+
+.bg-accent-light{
+  background:var(--color-accent-light);
+}
+
+.bg-surface{
+  background:var(--color-surface);
+}
+
+.bg-page{
+  background:var(--color-background);
+}
+
+.text-brand{
+  color:var(--color-primary);
+}
+
+.text-accent{
+  color:var(--color-accent);
+}
+
+.text-muted{
+  color:var(--color-text-light);
+}
+
+.border-brand{
+  border-color:var(--color-primary);
+}
+
+.border-default{
+  border-color:var(--color-border);
+}
+
+.shadow-brand{
+  box-shadow:0 10px 30px var(--shadow-brand);
+}
+
+/* ==========================================================
+   ANIMATION
+========================================================== */
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-12px) scale(0.98);
+
+  from{
+    opacity:0;
+    transform:translateY(-12px) scale(.98);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
   }
+
 }
 
-.animate-slideDown {
-  animation: slideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+.animate-slideDown{
+  animation:slideDown .25s cubic-bezier(.4,0,.2,1) forwards;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
+
+::-webkit-scrollbar{
+  width:7px;
+  height:7px;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 10px;
+::-webkit-scrollbar-track{
+  background:#edf7f2;
 }
 
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #10b981, #059669);
-  border-radius: 10px;
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(
+      to bottom,
+      var(--color-primary),
+      var(--color-primary-hover)
+  );
+  border-radius:20px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #047857;
+::-webkit-scrollbar-thumb:hover{
+  background:var(--color-primary-hover);
+}
+
+/* ==========================================================
+   COMMON
+========================================================== */
+
+.no-gap{
+  margin-top:0!important;
+  padding-top:0!important;
 }

@@ -1,7 +1,7 @@
 // src/features/auth/hooks/useAuth.js
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, logoutUser, clearError, clearSuccess, manualLogout } from '../services/authSlice';
+import { loginUser, registerUser, logoutUser, clearError, clearSuccess, manualLogout , getProfile } from '../services/authSlice';
 import { useState } from 'react';
 
 export const useAuth = () => {
@@ -13,15 +13,45 @@ export const useAuth = () => {
     (state) => state.auth
   );
 
+  const register = async (userData) => {
+  setLoading(true);
+
+  try {
+    const result = await dispatch(registerUser(userData)).unwrap();
+
+    setLoading(false);
+    return result;
+  } catch (error) {
+    setLoading(false);
+    throw error;
+  }
+};
+
+
   const login = async (email, password) => {
     setLoading(true);
     try {
       const result = await dispatch(loginUser({ email, password })).unwrap();
       setLoading(false);
       
-      if (result) {
-        setTimeout(() => navigate('/'), 100);
-      }
+if(result){
+
+    switch(result.user.role){
+
+        case "ADMIN":
+            navigate("/admin/dashboard");
+            break;
+
+        case "SELLER":
+            navigate("/seller/dashboard");
+            break;
+
+        default:
+            navigate("/");
+    }
+
+}
+
       return result;
     } catch (error) {
       setLoading(false);
@@ -32,20 +62,18 @@ export const useAuth = () => {
   const logout = async () => {
     setLoading(true);
     try {
-      console.log('🔄 Starting logout process...');
       
-      // 1. First - Dispatch logout (API call + Token clear)
+      
+    
       const result = await dispatch(logoutUser()).unwrap();
       
-      console.log('✅ Logout successful:', result);
+       
       
-      // 2. Force state update
       dispatch(manualLogout());
       
-      // 3. Navigate to home
-      navigate('/');
+       navigate('/');
       
-      // 4. Force reload to reset all components
+    
       setTimeout(() => {
         window.location.reload();
       }, 100);
@@ -53,10 +81,9 @@ export const useAuth = () => {
       setLoading(false);
       return true;
     } catch (error) {
-      console.error('❌ Logout failed:', error);
+      console.error('Logout failed:', error);
       
-      // Emergency cleanup
-      dispatch(manualLogout());
+       dispatch(manualLogout());
       navigate('/');
       
       setLoading(false);
@@ -72,6 +99,13 @@ export const useAuth = () => {
     dispatch(clearSuccess());
   };
 
+  const loadProfile = async () => {
+  try {
+    return await dispatch(getProfile()).unwrap();
+  } catch (error) {
+    throw error;
+  }
+};
   return {
     user,
     isAuthenticated,
@@ -79,6 +113,8 @@ export const useAuth = () => {
     error,
     success,
     login,
+    register,
+    loadProfile,
     logout,
     clearAuthError,
     clearAuthSuccess,

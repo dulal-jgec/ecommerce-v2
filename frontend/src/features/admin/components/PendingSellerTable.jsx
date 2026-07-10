@@ -1,4 +1,3 @@
-// src/features/admin/components/PendingSellerTable.jsx
 import React, { useState, useEffect } from "react";
 import { Eye, Check, X } from "lucide-react";
 import {
@@ -100,8 +99,8 @@ const PendingSellerTable = () => {
                 </td>
                 <td className="py-3 text-gray-500 text-sm">{seller.email}</td>
                 <td className="py-3 text-gray-500 text-sm">
-                  {seller.createdAt
-                    ? new Date(seller.createdAt).toLocaleDateString()
+                  {seller.appliedAt
+                    ? new Date(seller.appliedAt).toLocaleDateString()
                     : "-"}
                 </td>
                 <td className="py-3">

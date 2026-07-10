@@ -1,25 +1,34 @@
 // src/features/seller/components/SellerHeader.jsx
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  Bell, 
-  Search, 
-  User, 
-  ChevronDown, 
-  LogOut, 
-  Settings, 
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  Bell,
+  Search,
+  User,
+  ChevronDown,
+  LogOut,
+  Settings,
   HelpCircle,
   Menu,
   X,
-  Store
-} from 'lucide-react';
+  Store,
+} from "lucide-react";
+import { useSelector } from "react-redux";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 const SellerHeader = ({ sidebarOpen, setSidebarOpen }) => {
+  const { logout } = useAuth();
+  const { user } = useSelector((state) => state.auth);
+
+  const email = user?.email || "No Email";
+  const name = email.split("@")[0];
+  const firstLetter = name.charAt(0).toUpperCase();
+
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const notifications = [
-    { id: 1, title: 'New order #ORD-001', time: '2 min ago', read: false },
-    { id: 2, title: 'Product approved', time: '15 min ago', read: false },
+    { id: 1, title: "New order #ORD-001", time: "2 min ago", read: false },
+    { id: 2, title: "Product approved", time: "15 min ago", read: false },
   ];
 
   return (
@@ -35,7 +44,9 @@ const SellerHeader = ({ sidebarOpen, setSidebarOpen }) => {
               {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
             <div className="hidden md:block">
-              <h2 className="text-lg font-semibold text-gray-800">Seller Dashboard</h2>
+              <h2 className="text-lg font-semibold text-gray-800">
+                Seller Dashboard
+              </h2>
               <p className="text-xs text-gray-400">Welcome back, EcoStore</p>
             </div>
           </div>
@@ -53,7 +64,10 @@ const SellerHeader = ({ sidebarOpen, setSidebarOpen }) => {
 
             {/* Search */}
             <div className="hidden sm:block relative">
-              <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search
+                size={18}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              />
               <input
                 type="text"
                 placeholder="Search..."
@@ -76,31 +90,53 @@ const SellerHeader = ({ sidebarOpen, setSidebarOpen }) => {
                 className="flex items-center gap-2 pl-2 border-l border-gray-200 hover:bg-gray-50 rounded-xl p-1.5 transition"
               >
                 <div className="w-9 h-9 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                  E
+                  {firstLetter}
                 </div>
                 <div className="hidden md:block text-left">
-                  <p className="text-sm font-medium text-gray-800">EcoStore</p>
-                  <p className="text-xs text-gray-400">eco@example.com</p>
+                  <p className="text-sm font-medium text-gray-800">{name}</p>
+
+                  <p className="text-xs text-gray-400">{email}</p>
                 </div>
-                <ChevronDown size={16} className={`text-gray-400 transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  size={16}
+                  className={`text-gray-400 transition-transform duration-200 ${showProfileMenu ? "rotate-180" : ""}`}
+                />
               </button>
 
               {showProfileMenu && (
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50">
                   <div className="px-4 py-3 border-b border-gray-100">
-                    <p className="font-semibold text-gray-800">EcoStore India</p>
-                    <p className="text-xs text-gray-400">eco@example.com</p>
+                    <p className="font-semibold text-gray-800">{name}</p>
+
+                    <p className="text-xs text-gray-400">{email}</p>
                   </div>
-                  <Link to="/seller/store-profile" className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition">
+                  <Link
+                    to="/seller/store-profile"
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
+                  >
                     <Store size={16} />
                     Store Profile
                   </Link>
-                  <Link to="/seller/settings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition">
+                  <Link
+                    to="/seller/settings"
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition"
+                  >
                     <Settings size={16} />
                     Settings
                   </Link>
                   <div className="border-t border-gray-100 my-1"></div>
-                  <button className="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition w-full">
+                  <button
+                    onClick={async () => {
+                      const ok = window.confirm(
+                        "Are you sure you want to logout?",
+                      );
+                      if (!ok) return;
+
+                      setShowProfileMenu(false);
+                      await logout();
+                    }}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition w-full"
+                  >
                     <LogOut size={16} />
                     Logout
                   </button>

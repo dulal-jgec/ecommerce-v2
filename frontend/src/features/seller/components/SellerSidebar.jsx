@@ -22,7 +22,7 @@ const SellerSidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
 
   const menuItems = [
-    { path: '/seller', icon: LayoutDashboard, label: 'Dashboard' },
+    { path: '/seller/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { path: '/seller/products', icon: Package, label: 'Products' },
     { path: '/seller/products/add', icon: PlusCircle, label: 'Add Product' },
     { path: '/seller/orders', icon: ShoppingBag, label: 'Orders' },

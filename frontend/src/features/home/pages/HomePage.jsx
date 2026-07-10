@@ -5,24 +5,19 @@ import CategorySection from '../sections/CategorySection';
 import FlashSale from '../sections/FlashSale';
 import FeaturedProducts from '../sections/FeaturedProducts';
 import BestSellers from '../sections/BestSellers';
-import SpecialOfferBanner from '../sections/SpecialOfferBanner';
 import NewArrivals from '../sections/NewArrivals';
-import Testimonials from '../sections/Testimonials';
-import NewsletterSection from '../sections/NewsletterSection';
 import TrendingSection from '../sections/TrendingSection';
+import NewsletterSection from '../sections/NewsletterSection';
 
 const HomePage = () => {
   return (
-    <div className="bg-gray-50">
-      <HeroCarousel />
+<div className="bg-white m-0 p-0">     <HeroCarousel />
       <CategorySection />
       <FlashSale />
       <FeaturedProducts />
       <BestSellers />
-      <SpecialOfferBanner />
       <NewArrivals />
       <TrendingSection />
-      <Testimonials />
       <NewsletterSection />
     </div>
   );

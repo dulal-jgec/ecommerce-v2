@@ -1,5 +1,5 @@
 // src/features/checkout/pages/CheckoutPage.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCheckout } from "../hooks/useCheckout";
 import CheckoutLayout from "../components/CheckoutLayout";
 import ShippingAddress from "../components/ShippingAddress";
@@ -8,39 +8,42 @@ import PaymentMethod from "../components/PaymentMethod";
 import OrderSummary from "../components/OrderSummary";
 import CouponSection from "../components/CouponSection";
 import PlaceOrderButton from "../components/PlaceOrderButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { createPayment, verifyPayment } from "../services/checkoutService";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  
+  const productFromUrl = {
+    productId: searchParams.get("productId"),
+    quantity: parseInt(searchParams.get("quantity") || "1"),
+    color: searchParams.get("color") || "Default",
+    name: searchParams.get("name") || "",
+    price: parseFloat(searchParams.get("price") || "0"),
+    image: searchParams.get("image") || "",
+  };
+
+ 
 
   const openRazorpay = (payment) => {
     const options = {
       key: payment.key,
-
       order_id: payment.razorpayOrderId,
-
-      name: "My Shop",
-
+      name: "ShopLy",
       description: "Order Payment",
-
       handler: async function (response) {
         await verifyPayment({
           razorpayOrderId: response.razorpay_order_id,
-
           razorpayPaymentId: response.razorpay_payment_id,
-
           razorpaySignature: response.razorpay_signature,
         });
-
         alert("Payment Success");
-
         navigate("/orders");
       },
     };
-
     const razor = new window.Razorpay(options);
-
     razor.open();
   };
 
@@ -58,7 +61,6 @@ const CheckoutPage = () => {
     coupon,
     discount,
     total,
-
     handleAddAddress,
     handleSetDefaultAddress,
     handleDeleteAddress,
@@ -68,32 +70,49 @@ const CheckoutPage = () => {
 
   const [step, setStep] = useState(1);
 
+  // Create order items from URL if product exists
+  const getOrderItems = () => {
+    // If product comes from URL (Buy Now)
+    if (productFromUrl.productId && productFromUrl.price > 0) {
+      return [{
+        productId: productFromUrl.productId,
+        name: productFromUrl.name || "Product",
+        price: productFromUrl.price,
+        quantity: productFromUrl.quantity || 1,
+        color: productFromUrl.color || "Default",
+        imageUrl: productFromUrl.image || "",
+      }];
+    }
+    // Otherwise use cart items
+    return cart?.items || [];
+  };
+
+  const orderItems = getOrderItems();
+  const orderTotal = orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  console.log("Order Items:", orderItems);  
+  console.log("Order Total:", orderTotal); 
+
   const handleNext = async () => {
     if (step === 1 && selectedAddress) setStep(2);
     else if (step === 2) {
-       
       setStep(3);
     }
   };
 
   const handleFinalOrder = async () => {
     const order = await handlePlaceOrder();
-
     if (!order) return;
-
     const payment = await createPayment({
       orderId: order.orderId,
     });
-
     openRazorpay(payment);
   };
 
   return (
     <CheckoutLayout step={step}>
       <div className="grid lg:grid-cols-3 gap-8">
-        {/* Left Column */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Step 1: Address */}
           {step === 1 && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <ShippingAddress
@@ -114,20 +133,13 @@ const CheckoutPage = () => {
             </div>
           )}
 
-          {/* Step 2: Delivery & Payment */}
           {step === 2 && (
             <div className="space-y-6">
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <DeliveryOptions
-                  selected={shippingMethod}
-                  onSelect={setShippingMethod}
-                />
+                <DeliveryOptions selected={shippingMethod} onSelect={setShippingMethod} />
               </div>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <PaymentMethod
-                  selected={paymentMethod}
-                  onSelect={setPaymentMethod}
-                />
+                <PaymentMethod selected={paymentMethod} onSelect={setPaymentMethod} />
               </div>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <CouponSection
@@ -147,7 +159,6 @@ const CheckoutPage = () => {
             </div>
           )}
 
-          {/* Step 3: Review & Place Order */}
           {step === 3 && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
               <div className="flex items-center gap-2 text-emerald-600">
@@ -157,23 +168,17 @@ const CheckoutPage = () => {
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between py-2 border-b border-gray-100">
                   <span className="text-gray-500">Delivery</span>
-                  <span className="text-gray-800 capitalize">
-                    {shippingMethod}
-                  </span>
+                  <span className="text-gray-800 capitalize">{shippingMethod}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-gray-100">
                   <span className="text-gray-500">Payment</span>
-                  <span className="text-gray-800 capitalize">
-                    {paymentMethod}
-                  </span>
+                  <span className="text-gray-800 capitalize">{paymentMethod}</span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-gray-100">
                   <span className="text-gray-500">Shipping Address</span>
                   <span className="text-gray-800 text-right">
-                    {selectedAddress?.fullName}
-                    <br />
-                    {selectedAddress?.street}
-                    <br />
+                    {selectedAddress?.fullName}<br />
+                    {selectedAddress?.street}<br />
                     {selectedAddress?.city}, {selectedAddress?.state}
                   </span>
                 </div>
@@ -181,19 +186,17 @@ const CheckoutPage = () => {
               <PlaceOrderButton
                 onClick={handleFinalOrder}
                 loading={loading}
-                total={cart.totalPrice}
+                total={orderTotal}
               />
-              {error && (
-                <p className="text-sm text-red-500 text-center">{error}</p>
-              )}
+              {error && <p className="text-sm text-red-500 text-center">{error}</p>}
             </div>
           )}
         </div>
 
-        {/* Right Column - Order Summary */}
+        {/*Order Summary - Pass correct data */}
         <div className="lg:col-span-1">
           <OrderSummary
-            cart={cart}
+            items={orderItems}
             shippingCost={shippingMethod === "express" ? 100 : 0}
             discount={discount}
           />

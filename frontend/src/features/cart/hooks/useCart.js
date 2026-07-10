@@ -14,12 +14,11 @@ export const useCart = () => {
   const dispatch = useDispatch();
   const { items, totalItems, subtotal, total, loading, error } = useSelector((state) => state.cart);
 
-  // Cart Load
   const loadCart = () => {
     dispatch(fetchCart());
   };
 
-  // Add to Cart
+  
   const addToCart = async (productId, quantity = 1, color = null) => {
     try {
       const result = await dispatch(addItemToCart({ productId, quantity, color })).unwrap();
@@ -30,7 +29,7 @@ export const useCart = () => {
     }
   };
 
-  // Update Quantity
+ 
   const updateQuantity = async (cartItemId, quantity) => {
     try {
       const result = await dispatch(updateItemQuantity({ cartItemId, quantity })).unwrap();
@@ -41,7 +40,7 @@ export const useCart = () => {
     }
   };
 
-  // Remove from Cart
+ 
   const removeItem = async (cartItemId) => {
     try {
       await dispatch(removeItemFromCart(cartItemId)).unwrap();
@@ -50,8 +49,7 @@ export const useCart = () => {
       throw error;
     }
   };
-
-  // Clear Cart
+ 
   const clearCart = async () => {
     try {
       await dispatch(clearAllCart()).unwrap();
@@ -61,7 +59,7 @@ export const useCart = () => {
     }
   };
 
-  // Local Add (Optimistic Update)
+
   const optimisticAdd = (product) => {
     dispatch(localAddItem({
       productId: product.id,
@@ -72,7 +70,7 @@ export const useCart = () => {
     }));
   };
 
-  // Local Remove
+
   const optimisticRemove = (cartItemId) => {
     dispatch(localRemoveItem(cartItemId));
   };

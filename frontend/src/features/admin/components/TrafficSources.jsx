@@ -1,4 +1,3 @@
-// src/features/admin/components/TrafficSources.jsx
 import React from 'react';
 import { Globe, MousePointer, Users, Share2, TrendingUp } from 'lucide-react';
 

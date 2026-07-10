@@ -1,4 +1,3 @@
-// src/features/admin/components/AdminSidebar.jsx
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -20,7 +19,7 @@ const AdminSidebar = ({ sidebarOpen }) => {
   const location = useLocation();
 
   const menuItems = [
-    { path: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
+    { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { path: '/admin/users', icon: Users, label: 'Users' },
     { path: '/admin/sellers', icon: Store, label: 'Sellers' },
     { path: '/admin/products', icon: Package, label: 'Products' },

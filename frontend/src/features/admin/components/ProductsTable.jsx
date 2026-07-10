@@ -1,4 +1,3 @@
-// src/features/admin/components/ProductsTable.jsx
 import React from 'react';
 import { Eye, Edit, Trash2, Star } from 'lucide-react';
 

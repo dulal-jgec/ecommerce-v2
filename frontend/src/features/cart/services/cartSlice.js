@@ -122,8 +122,7 @@ const cartSlice = createSlice({
       })
 
       .addCase(fetchCart.fulfilled, (state, action) => {
-        console.log("FETCH CART :", action.payload);
-
+       
         state.loading = false;
 
         state.items = action.payload.items || [];
@@ -139,7 +138,6 @@ const cartSlice = createSlice({
       })
 
       .addCase(fetchCart.rejected, (state, action) => {
-        console.log("FETCH CART ERROR :", action.error);
 
         state.loading = false;
         state.error = action.error.message;
@@ -148,8 +146,7 @@ const cartSlice = createSlice({
      
 
       .addCase(addItemToCart.fulfilled, (state, action) => {
-        console.log("ADD CART :", action.payload);
-
+      
         state.items = action.payload.items || [];
 
         state.totalItems =
@@ -165,8 +162,7 @@ const cartSlice = createSlice({
        
 
       .addCase(updateItemQuantity.fulfilled, (state, action) => {
-        console.log("UPDATE CART :", action.payload);
-
+      
         state.items = action.payload.items || [];
 
         state.totalItems =

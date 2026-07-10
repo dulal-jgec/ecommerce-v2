@@ -11,33 +11,31 @@ export const AUTH = {
 export const USER = {
   PROFILE: '/api/v1/users/profile',
   UPDATE: '/api/v1/users/update',
-
   ADMIN_ALL: '/api/v1/users/admin',
   ADMIN_DETAILS: (id) => `/api/v1/users/admin/${id}`,
   ADMIN_TOGGLE: (id) => `/api/v1/users/admin/${id}/toggle-status`,
   ADMIN_ROLE: (id) => `/api/v1/users/admin/${id}/role`,
   ADMIN_DELETE: (id) => `/api/v1/users/admin/${id}`,
+  
+
 };
 
 export const SELLER = {
   PENDING: '/api/v1/seller/pending',
   APPROVE: (id) => `/api/v1/seller/${id}/approve`,
   REJECT: (id) => `/api/v1/seller/${id}/reject`,
-  SELLER_USERS: "/api/v1/users/admin/sellers",
+  ALL: '/api/v1/seller/admin', 
 };
 
 export const ORDERS = {
-  
   CREATE: '/api/v1/orders',
   MY_ORDERS: '/api/v1/orders',
   DETAILS: (id) => `/api/v1/orders/${id}`,
-
-
+  
   ADMIN_ALL: '/api/v1/orders/admin',
   ADMIN_DETAILS: (id) => `/api/v1/orders/admin/${id}`,
   ADMIN_STATUS: (id) => `/api/v1/orders/admin/${id}/status`,
    
-
   SELLER_ALL: '/api/v1/orders/seller/orders',
   SELLER_DETAILS: (id) => `/api/v1/orders/seller/orders/${id}`,
   SELLER_STATUS: (id) => `/api/v1/orders/seller/orders/${id}/status`,
@@ -57,11 +55,14 @@ export const PRODUCT = {
   SEARCH: '/api/v1/products/search',
   IMAGES: (productId) => `/api/v1/products/${productId}/images`,
   DELETE_IMAGE: (imageId) => `/api/v1/products/images/${imageId}`,
+  VARIANTS: (productId) => `/api/v1/products/${productId}/variants`,
+  SET_MAIN_IMAGE: (imageId) => `/api/v1/products/images/${imageId}/main`,
+  MARKETING: (id) => `/api/v1/products/${id}/marketing`,
 };
 
 export const CATEGORY = {
-  ALL: '/api/v1/categories',
-  CREATE: '/api/v1/categories',
+  GET_ALL: "/api/v1/categories",
+  CREATE: "/api/v1/categories",
 };
 
 export const CART = {
@@ -92,4 +93,20 @@ export const REVIEW = {
   UPDATE: (id) => `/api/v1/reviews/${id}`,
   FEATURE: (id) => `/api/v1/reviews/${id}/feature`,
   UNFEATURE: (id) => `/api/v1/reviews/${id}/unfeature`,
+};
+
+export const BANNER = {
+  ACTIVE: "/api/v1/banners",
+
+  ADMIN_ALL: "/api/v1/banners/admin",
+
+  ADMIN_DETAILS: (id) => `/api/v1/banners/admin/${id}`,
+
+  CREATE: "/api/v1/banners/admin",
+
+  UPDATE: (id) => `/api/v1/banners/admin/${id}`,
+
+  TOGGLE: (id) => `/api/v1/banners/admin/${id}/toggle`,
+
+  DELETE: (id) => `/api/v1/banners/admin/${id}`,
 };

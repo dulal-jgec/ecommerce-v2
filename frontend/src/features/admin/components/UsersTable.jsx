@@ -1,4 +1,3 @@
-// src/features/admin/components/UsersTable.jsx
 import React from 'react';
 import { Eye, Edit, Trash2, Mail, Phone } from 'lucide-react';
 

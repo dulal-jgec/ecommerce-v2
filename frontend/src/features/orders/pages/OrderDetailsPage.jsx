@@ -20,7 +20,7 @@ import {
   Mail,
   Shield,
   Wallet,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 import { getOrderDetails, cancelOrder } from "../services/orderService";
 import OrderStatusBadge from "../components/OrderStatusBadge";
@@ -36,8 +36,16 @@ const OrderDetailsPage = () => {
   const [error, setError] = useState(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
 
+ 
+
   useEffect(() => {
     loadOrder();
+
+    const interval = setInterval(() => {
+      loadOrder();
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, [id]);
 
   const loadOrder = async () => {
@@ -70,7 +78,9 @@ const OrderDetailsPage = () => {
             <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
             <div className="absolute inset-0 w-16 h-16 border-4 border-indigo-200 border-t-transparent rounded-full animate-pulse"></div>
           </div>
-          <p className="mt-4 text-slate-500 font-medium">Loading order details...</p>
+          <p className="mt-4 text-slate-500 font-medium">
+            Loading order details...
+          </p>
         </div>
       </div>
     );
@@ -84,9 +94,16 @@ const OrderDetailsPage = () => {
             <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Package size={40} className="text-red-500" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-800">Order Not Found</h2>
-            <p className="text-slate-500 mt-2">{error || "The order you are looking for does not exist."}</p>
-            <Link to="/orders" className="inline-block mt-6 px-6 py-3 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-indigo-200 transition shadow-md">
+            <h2 className="text-2xl font-bold text-slate-800">
+              Order Not Found
+            </h2>
+            <p className="text-slate-500 mt-2">
+              {error || "The order you are looking for does not exist."}
+            </p>
+            <Link
+              to="/orders"
+              className="inline-block mt-6 px-6 py-3 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-indigo-200 transition shadow-md"
+            >
               Back to Orders
             </Link>
           </div>
@@ -95,27 +112,32 @@ const OrderDetailsPage = () => {
     );
   }
 
-  const canCancel = ["PENDING", "PROCESSING"].includes(order.status);
+  const currentStatus = order.status;
+
+  const canCancel = currentStatus === "PLACED" || currentStatus === "PAID";
+
   const statusColors = {
-    PENDING: 'from-amber-500 to-amber-600',
-    PROCESSING: 'from-blue-500 to-blue-600',
-    SHIPPED: 'from-indigo-500 to-indigo-600',
-    DELIVERED: 'from-emerald-500 to-emerald-600',
-    CANCELLED: 'from-red-500 to-red-600',
+    PLACED: "from-gray-500 to-gray-600",
+    PAID: "from-yellow-500 to-yellow-600",
+    SHIPPED: "from-blue-500 to-blue-600",
+    DELIVERED: "from-emerald-500 to-emerald-600",
+    CANCELLED: "from-red-500 to-red-600",
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50/80 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* Header with Gradient */}
         <div className="bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 rounded-3xl p-8 mb-8 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-400/20 rounded-full blur-2xl"></div>
-          
+
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
             <div className="flex items-center gap-4">
-              <Link to="/orders" className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition backdrop-blur-sm">
+              <Link
+                to="/orders"
+                className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition backdrop-blur-sm"
+              >
                 <ArrowLeft size={20} className="text-white" />
               </Link>
               <div>
@@ -150,23 +172,39 @@ const OrderDetailsPage = () => {
           </div>
         </div>
 
-        {/* Status Card */}
+        {/* 3. Status Card */}
         <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-lg border border-white/50 p-6 mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${statusColors[order.status] || 'from-gray-500 to-gray-600'} flex items-center justify-center shadow-lg`}>
-                {order.status === 'DELIVERED' && <Check size={24} className="text-white" />}
-                {order.status === 'SHIPPED' && <Truck size={24} className="text-white" />}
-                {order.status === 'PROCESSING' && <Package size={24} className="text-white" />}
-                {order.status === 'PENDING' && <Clock size={24} className="text-white" />}
-                {order.status === 'CANCELLED' && <X size={24} className="text-white" />}
+              <div
+                className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${statusColors[currentStatus] || "from-gray-500 to-gray-600"} flex items-center justify-center shadow-lg`}
+              >
+                {currentStatus === "DELIVERED" && (
+                  <Check size={24} className="text-white" />
+                )}
+                {currentStatus === "SHIPPED" && (
+                  <Truck size={24} className="text-white" />
+                )}
+                {currentStatus === "PLACED" && (
+                  <Package size={24} className="text-white" />
+                )}
+                {currentStatus === "PAID" && (
+                  <CreditCard size={24} className="text-white" />
+                )}
+                {currentStatus === "CANCELLED" && (
+                  <X size={24} className="text-white" />
+                )}
               </div>
               <div>
-                <p className="text-sm text-slate-500 font-medium">Order Status</p>
+                <p className="text-sm text-slate-500 font-medium">
+                  Order Status
+                </p>
                 <div className="flex items-center gap-2">
-                  <OrderStatusBadge status={order.status} />
+                  <OrderStatusBadge status={currentStatus} />
                   <span className="text-sm text-slate-400">
-                    {order.status === "DELIVERED" ? "Completed ✓" : "In Progress"}
+                    {currentStatus === "DELIVERED"
+                      ? "Completed ✓"
+                      : "In Progress"}
                   </span>
                 </div>
               </div>
@@ -184,7 +222,7 @@ const OrderDetailsPage = () => {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Order Items */}
+            {/* 4. Order Items with Status Badge */}
             <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-lg border border-white/50 overflow-hidden">
               <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
                 <h3 className="font-semibold text-slate-800 flex items-center gap-2">
@@ -209,9 +247,17 @@ const OrderDetailsPage = () => {
                       />
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-slate-800">{item.productName}</p>
+                      {/* Product Name with Status Badge */}
+                      <div className="flex items-center justify-between">
+                        <p className="font-semibold text-slate-800">
+                          {item.productName}
+                        </p>
+                        <OrderStatusBadge status={item.status} />
+                      </div>
                       <div className="flex items-center gap-4 mt-1">
-                        <span className="text-sm text-slate-500">Qty: {item.quantity}</span>
+                        <span className="text-sm text-slate-500">
+                          Qty: {item.quantity}
+                        </span>
                         {item.variant && (
                           <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
                             {item.variant}
@@ -220,8 +266,12 @@ const OrderDetailsPage = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-indigo-600">₹{item.price * item.quantity}</p>
-                      <p className="text-xs text-slate-400">₹{item.price} each</p>
+                      <p className="font-bold text-indigo-600">
+                        ₹{item.price * item.quantity}
+                      </p>
+                      <p className="text-xs text-slate-400">
+                        ₹{item.price} each
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -232,11 +282,15 @@ const OrderDetailsPage = () => {
                 <div className="space-y-2 max-w-xs ml-auto">
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-500">Subtotal</span>
-                    <span className="text-slate-700 font-medium">₹{order.totalPrice?.toLocaleString()}</span>
+                    <span className="text-slate-700 font-medium">
+                      ₹{order.totalPrice?.toLocaleString()}
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-500">Shipping</span>
-                    <span className="text-slate-700 font-medium">₹{order.shippingCost || 0}</span>
+                    <span className="text-slate-700 font-medium">
+                      ₹{order.shippingCost || 0}
+                    </span>
                   </div>
                   {order.discount > 0 && (
                     <div className="flex justify-between text-sm text-emerald-600">
@@ -246,7 +300,9 @@ const OrderDetailsPage = () => {
                   )}
                   <div className="flex justify-between font-bold text-slate-800 pt-2 border-t border-slate-200">
                     <span>Total</span>
-                    <span className="text-indigo-600 text-xl">₹{order.totalPrice?.toLocaleString()}</span>
+                    <span className="text-indigo-600 text-xl">
+                      ₹{order.totalPrice?.toLocaleString()}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -260,17 +316,25 @@ const OrderDetailsPage = () => {
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-100">
-                  <p className="text-xs text-slate-400 uppercase tracking-wider">Method</p>
+                  <p className="text-xs text-slate-400 uppercase tracking-wider">
+                    Method
+                  </p>
                   <p className="font-medium text-slate-800 mt-1 capitalize flex items-center gap-2">
                     <Wallet size={16} className="text-indigo-500" />
                     {order.paymentMethod || "Card"}
                   </p>
                 </div>
                 <div className="p-4 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-100">
-                  <p className="text-xs text-slate-400 uppercase tracking-wider">Status</p>
-                  <span className={`font-medium mt-1 inline-block px-3 py-1 rounded-full text-sm ${
-                    order.paymentStatus === "PAID" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
-                  }`}>
+                  <p className="text-xs text-slate-400 uppercase tracking-wider">
+                    Status
+                  </p>
+                  <span
+                    className={`font-medium mt-1 inline-block px-3 py-1 rounded-full text-sm ${
+                      order.paymentStatus === "PAID"
+                        ? "bg-emerald-100 text-emerald-700"
+                        : "bg-amber-100 text-amber-700"
+                    }`}
+                  >
                     {order.paymentStatus || "Success"}
                   </span>
                 </div>
@@ -280,7 +344,14 @@ const OrderDetailsPage = () => {
 
           {/* Right Column */}
           <div className="space-y-6">
-            <OrderTimeline status={order.status} createdAt={order.createdAt} updatedAt={order.updatedAt} />
+            {/* 5. Timeline - Fixed */}
+            <OrderTimeline
+              status={order.status}
+              createdAt={order.createdAt}
+              updatedAt={order.updatedAt}
+            />
+
+            {/* 6. ShippingDetails - Fixed */}
             <ShippingDetails
               address={{
                 fullName: order.shippingFullName,

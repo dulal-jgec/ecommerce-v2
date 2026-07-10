@@ -1,46 +1,57 @@
 // src/features/seller/pages/EditProductPage.jsx
-import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  Save, 
-  Eye,
-  Trash2,
-  AlertTriangle
-} from 'lucide-react';
-import ProductForm from '../components/ProductForm';
-import ProductImages from '../components/ProductImages';
-import ProductVariants from '../components/ProductVariants';
-import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { ArrowLeft, Save, Eye, Trash2, AlertTriangle } from "lucide-react";
+import ProductForm from "../components/ProductForm";
+import ProductImages from "../components/product-images/ProductImages";
+import ProductVariants from "../components/ProductVariants";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
+import { getProductById, updateProduct } from "../services/productService";
 
 const EditProductPage = () => {
   const { id } = useParams();
-  const [activeTab, setActiveTab] = useState('basic');
+  const [activeTab, setActiveTab] = useState("basic");
   const [productData, setProductData] = useState({
-    id: id,
-    name: 'Organic Honey 500g',
-    description: 'Pure organic honey from the Himalayas',
-    category: 'Food & Beverages',
-    price: '599',
-    originalPrice: '899',
-    stock: '45',
-    images: [
-      { id: 1, url: 'https://via.placeholder.com/200', isMain: true },
-      { id: 2, url: 'https://via.placeholder.com/200', isMain: false },
-    ],
-    variants: [
-      { id: 1, name: '500g', price: 599, stock: 25 },
-      { id: 2, name: '1kg', price: 1099, stock: 20 },
-    ],
-    status: 'active'
+    name: "",
+    description: "",
+    category: "",
+    price: "",
+    originalPrice: "",
+    stock: "",
+    images: [],
+    variants: [],
+    status: "",
   });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const tabs = [
-    { id: 'basic', label: 'Basic Info' },
-    { id: 'images', label: 'Images' },
-    { id: 'variants', label: 'Variants' },
+    { id: "basic", label: "Basic Info" },
+    { id: "images", label: "Images" },
+    { id: "variants", label: "Variants" },
   ];
+
+  const handleUpdateProduct = async () => {
+    try {
+      await updateProduct(id, productData);
+      alert("Product updated successfully");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to update product");
+    }
+  };
+
+  useEffect(() => {
+    loadProduct();
+  }, []);
+
+  const loadProduct = async () => {
+    try {
+      const data = await getProductById(id);
+      setProductData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -48,7 +59,10 @@ const EditProductPage = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <Link to="/seller/products" className="p-2 hover:bg-gray-100 rounded-xl transition">
+            <Link
+              to="/seller/products"
+              className="p-2 hover:bg-gray-100 rounded-xl transition"
+            >
               <ArrowLeft size={20} className="text-gray-600" />
             </Link>
             <div>
@@ -69,7 +83,10 @@ const EditProductPage = () => {
             <Eye size={16} />
             Preview
           </button>
-          <button className="px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition flex items-center gap-2">
+          <button
+            onClick={handleUpdateProduct}
+            className="px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition flex items-center gap-2"
+          >
             <Save size={16} />
             Update Product
           </button>
@@ -86,8 +103,8 @@ const EditProductPage = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 text-sm font-medium border-b-2 transition whitespace-nowrap ${
                   activeTab === tab.id
-                    ? 'border-emerald-600 text-emerald-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    ? "border-emerald-600 text-emerald-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700"
                 }`}
               >
                 {tab.label}
@@ -97,14 +114,31 @@ const EditProductPage = () => {
         </div>
 
         <div className="p-6">
-          {activeTab === 'basic' && (
-            <ProductForm productData={productData} setProductData={setProductData} isEdit={true} />
+          {activeTab === "basic" && (
+            <ProductForm
+              productData={productData}
+              setProductData={setProductData}
+              isEdit={true}
+            />
           )}
-          {activeTab === 'images' && (
-            <ProductImages images={productData.images} setImages={(images) => setProductData({...productData, images})} />
+          {activeTab === "images" && (
+            <ProductImages
+              productId={id}
+              images={productData.images}
+              setImages={(images) => setProductData({ ...productData, images })}
+            />
           )}
-          {activeTab === 'variants' && (
-            <ProductVariants variants={productData.variants} setVariants={(variants) => setProductData({...productData, variants})} />
+          {activeTab === "variants" && (
+            <ProductVariants
+              productId={id}
+              variants={productData.variants || []}
+              setVariants={(variants) =>
+                setProductData((prev) => ({
+                  ...prev,
+                  variants,
+                }))
+              }
+            />
           )}
         </div>
       </div>
@@ -114,7 +148,7 @@ const EditProductPage = () => {
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
         onConfirm={() => {
-          console.log('Product deleted:', id);
+          console.log("Product deleted:", id);
           setShowDeleteModal(false);
         }}
         productName={productData.name}

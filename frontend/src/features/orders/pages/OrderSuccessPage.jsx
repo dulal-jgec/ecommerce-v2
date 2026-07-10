@@ -1,12 +1,24 @@
 // src/features/orders/pages/OrderSuccessPage.jsx
-import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import { 
-  Check, Package, Truck, Clock, Mail, Download, Printer, 
-  ShoppingBag, Home, Heart, ArrowRight, Sparkles, 
-  Shield, CreditCard, Gift
-} from 'lucide-react';
-import { getOrderDetails } from '../services/orderService';
+import React, { useState, useEffect } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import {
+  Check,
+  Package,
+  Truck,
+  Clock,
+  Mail,
+  Download,
+  Printer,
+  ShoppingBag,
+  Home,
+  Heart,
+  ArrowRight,
+  Sparkles,
+  Shield,
+  CreditCard,
+  Gift,
+} from "lucide-react";
+import { getOrderDetails } from "../services/orderService";
 
 const OrderSuccessPage = () => {
   const { id } = useParams();
@@ -20,8 +32,8 @@ const OrderSuccessPage = () => {
         const data = await getOrderDetails(id);
         setOrder(data);
       } catch (error) {
-        console.error('Error loading order:', error);
-        navigate('/orders');
+        console.error("Error loading order:", error);
+        navigate("/orders");
       } finally {
         setLoading(false);
       }
@@ -37,7 +49,9 @@ const OrderSuccessPage = () => {
             <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
             <div className="absolute inset-0 w-16 h-16 border-4 border-emerald-200 border-t-transparent rounded-full animate-pulse"></div>
           </div>
-          <p className="mt-4 text-slate-500 font-medium">Confirming your order...</p>
+          <p className="mt-4 text-slate-500 font-medium">
+            Confirming your order...
+          </p>
         </div>
       </div>
     );
@@ -46,7 +60,6 @@ const OrderSuccessPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-slate-50/80 py-12">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* Success Card */}
         <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 p-8 md:p-12 text-center relative overflow-hidden">
           {/* Decorative Background */}
@@ -63,11 +76,12 @@ const OrderSuccessPage = () => {
           </div>
 
           <h1 className="text-3xl font-bold text-slate-800 relative z-10 flex items-center justify-center gap-2">
-            Order Placed!
+            Order Successfully Placed!
             <Sparkles size={24} className="text-emerald-500" />
           </h1>
           <p className="text-slate-500 mt-2 max-w-sm mx-auto relative z-10">
-            Your order has been confirmed. We'll send you a confirmation email shortly.
+            Your order has been confirmed. You can track your order status
+            anytime from My Orders.
           </p>
 
           {/* Order Number */}
@@ -83,38 +97,68 @@ const OrderSuccessPage = () => {
             <div className="relative z-10 mt-6 text-left bg-gradient-to-r from-slate-50 to-white rounded-2xl p-4 border border-slate-100/50">
               <div className="flex items-center justify-between py-2 border-b border-slate-100">
                 <span className="text-slate-500 text-sm">Total Amount</span>
-                <span className="font-bold text-emerald-600 text-lg">₹{order.totalPrice?.toLocaleString()}</span>
+                <span className="font-bold text-emerald-600 text-lg">
+                  ₹{order.totalPrice?.toLocaleString()}
+                </span>
               </div>
               <div className="flex items-center justify-between py-2 border-b border-slate-100">
                 <span className="text-slate-500 text-sm">Payment</span>
                 <span className="text-slate-700 capitalize text-sm flex items-center gap-1">
                   <CreditCard size={14} className="text-indigo-500" />
-                  {order.paymentMethod || 'Card'}
+                  {order.paymentMethod || "Card"}
                 </span>
               </div>
               <div className="flex items-center justify-between py-2">
-                <span className="text-slate-500 text-sm">Delivery</span>
-                <span className="text-slate-700 text-sm flex items-center gap-1">
-                  <Truck size={14} className="text-emerald-500" />
-                  3-5 business days
+                <span className="text-slate-500 text-sm">Current Status</span>
+
+                <span className="text-slate-700 text-sm">
+                  {order.items?.[0]?.status || order.status}
                 </span>
               </div>
             </div>
           )}
 
           {/* Delivery Steps */}
-          <div className="relative z-10 mt-6 grid grid-cols-3 gap-3">
-            <div className="p-3 bg-gradient-to-br from-emerald-50 to-emerald-100/50 rounded-xl border border-emerald-100/50">
-              <Package size={20} className="mx-auto text-emerald-600" />
-              <p className="text-xs text-slate-600 mt-1 font-medium">Confirmed</p>
-            </div>
-            <div className="p-3 bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl border border-blue-100/50">
-              <Truck size={20} className="mx-auto text-blue-600" />
-              <p className="text-xs text-slate-600 mt-1 font-medium">Processing</p>
-            </div>
-            <div className="p-3 bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl border border-amber-100/50">
-              <Clock size={20} className="mx-auto text-amber-600" />
-              <p className="text-xs text-slate-600 mt-1 font-medium">Delivered</p>
+          <div className="relative z-10 mt-6">
+            <div className="flex items-center justify-between">
+              {["PLACED", "PAID", "SHIPPED", "DELIVERED"].map((step, index) => {
+                const current = [
+                  "PLACED",
+                  "PAID",
+                  "SHIPPED",
+                  "DELIVERED",
+                ].indexOf(order.items?.[0]?.status || order.status);
+
+                const active = index <= current;
+
+                return (
+                  <React.Fragment key={step}>
+                    <div className="flex flex-col items-center flex-1">
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center
+
+                        ${
+                          active
+                            ? "bg-emerald-500 text-white"
+                            : "bg-gray-200 text-gray-400"
+                        }`}
+                      >
+                        {index + 1}
+                      </div>
+
+                      <p className="text-xs mt-2">{step}</p>
+                    </div>
+
+                    {index !== 3 && (
+                      <div
+                        className={`flex-1 h-1 rounded
+
+                        ${index < current ? "bg-emerald-500" : "bg-gray-200"}`}
+                      />
+                    )}
+                  </React.Fragment>
+                );
+              })}
             </div>
           </div>
 
@@ -140,7 +184,7 @@ const OrderSuccessPage = () => {
           <div className="relative z-10 mt-6 flex flex-wrap items-center justify-center gap-4 text-sm">
             <span className="flex items-center gap-2 text-slate-400">
               <Mail size={16} />
-              Confirmation sent
+             Order Confirmed
             </span>
             <span className="text-slate-300">|</span>
             <span className="flex items-center gap-2 text-slate-400">
@@ -159,7 +203,13 @@ const OrderSuccessPage = () => {
         <div className="mt-6 text-center">
           <p className="text-sm text-slate-400 flex items-center justify-center gap-2">
             <Heart size={14} className="text-emerald-400" />
-            Need help? <Link to="/contact" className="text-indigo-600 font-medium hover:underline">Contact Support</Link>
+            Need help?{" "}
+            <Link
+              to="/contact"
+              className="text-indigo-600 font-medium hover:underline"
+            >
+              Contact Support
+            </Link>
           </p>
         </div>
       </div>

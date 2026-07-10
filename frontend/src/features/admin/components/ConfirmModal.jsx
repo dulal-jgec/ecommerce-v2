@@ -1,4 +1,3 @@
-// src/features/admin/components/ConfirmModal.jsx
 import React from 'react';
 import { X, AlertTriangle } from 'lucide-react';
 
@@ -10,7 +9,7 @@ const ConfirmModal = ({
   message, 
   confirmText = 'Confirm', 
   cancelText = 'Cancel',
-  type = 'danger' // danger | warning | info
+  type = 'danger' 
 }) => {
   if (!isOpen) return null;
 

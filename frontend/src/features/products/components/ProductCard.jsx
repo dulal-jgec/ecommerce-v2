@@ -19,22 +19,30 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
   // List View
   if (viewMode === "list") {
     return (
-      <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100/80 hover:border-indigo-200">
+      <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100/80 hover:border-emerald-200">
         <div className="flex flex-col sm:flex-row">
           <Link
             to={`/products/${product.id}`}
-            className="sm:w-56 h-56 bg-gray-50 flex-shrink-0"
+            className="sm:w-56 h-56 bg-gray-50 flex-shrink-0 relative"
           >
             <img
               src={product.images?.[0]?.imageUrl || "/images/placeholder.png"}
               alt={product.name}
               className="w-full h-full object-contain p-6"
+              onError={(e) => {
+                e.target.src = "/images/placeholder.png";
+              }}
             />
+            {discount > 0 && (
+              <span className="absolute top-3 left-3 bg-rose-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-sm shadow-rose-200">
+                -{discount}%
+              </span>
+            )}
           </Link>
           <div className="flex-1 p-6 flex flex-col justify-between">
             <div>
               <Link to={`/products/${product.id}`}>
-                <h3 className="font-semibold text-gray-800 hover:text-indigo-600 transition text-lg">
+                <h3 className="font-semibold text-gray-800 hover:text-emerald-600 transition text-lg">
                   {product.name}
                 </h3>
               </Link>
@@ -43,16 +51,16 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
                   <Star size={16} className="fill-yellow-400 text-yellow-400" />
                   <span className="font-medium">{product.averageRating || 0}</span>
                 </div>
-                <span className="text-gray-400">•</span>
+                <span className="text-gray-300">•</span>
                 <span className="text-sm text-gray-500">
                   {product.totalReviews || 0} reviews
                 </span>
-                <span className="text-gray-400">•</span>
+                <span className="text-gray-300">•</span>
                 <span
                   className={`text-sm font-medium px-2.5 py-0.5 rounded-full ${
                     product.stock > 0
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "bg-rose-50 text-rose-700"
                   }`}
                 >
                   {product.stock > 0 ? "In Stock" : "Out of Stock"}
@@ -64,7 +72,7 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
             </div>
             <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
               <div>
-                <span className="text-2xl font-bold text-gray-800">
+                <span className="text-2xl font-bold text-emerald-600">
                   ₹{product.price?.toLocaleString()}
                 </span>
                 {product.originalPrice && (
@@ -72,13 +80,12 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
                     ₹{product.originalPrice?.toLocaleString()}
                   </span>
                 )}
-                {discount > 0 && (
-                  <span className="ml-3 bg-red-500 text-white text-xs font-bold px-2.5 py-0.5 rounded-lg">
-                    {discount}% OFF
-                  </span>
-                )}
               </div>
-              <AddToCartButton productId={product.id} />
+              <AddToCartButton
+                productId={product.id}
+                product={product}
+                color={product.images?.[0]?.color || "Default"}
+              />
             </div>
           </div>
         </div>
@@ -89,7 +96,7 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
   // Grid View
   return (
     <div
-      className="group bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100/80 hover:border-indigo-200/50"
+      className="group bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100/80 hover:border-emerald-200/50"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -100,16 +107,19 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
             src={product.images?.[0]?.imageUrl || "/images/placeholder.png"}
             alt={product.name}
             className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500"
+            onError={(e) => {
+              e.target.src = "/images/placeholder.png";
+            }}
           />
 
           {/* Wishlist Button */}
           <button
             onClick={() => setIsWishlisted(!isWishlisted)}
             className={`absolute top-4 right-4 p-2.5 rounded-full bg-white shadow-md hover:shadow-lg transition-all duration-300 ${
-              isWishlisted ? "text-red-500" : "text-gray-400 hover:text-red-500"
+              isWishlisted ? "text-rose-500" : "text-gray-400 hover:text-rose-500"
             }`}
           >
-            <Heart size={18} className={isWishlisted ? "fill-red-500" : ""} />
+            <Heart size={18} className={isWishlisted ? "fill-rose-500" : ""} />
           </button>
 
           {/* Quick View Overlay */}
@@ -120,7 +130,7 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
           >
             <Link
               to={`/products/${product.id}`}
-              className="bg-white text-gray-800 px-6 py-3 rounded-xl font-medium text-sm hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-xl flex items-center gap-2"
+              className="bg-white text-gray-800 px-6 py-3 rounded-xl font-medium text-sm hover:bg-emerald-600 hover:text-white transition-all duration-300 shadow-xl flex items-center gap-2"
             >
               <Eye size={18} />
               Quick View
@@ -130,13 +140,13 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
           {/* Badges */}
           <div className="absolute top-4 left-4 flex flex-col gap-1.5">
             {discount > 0 && (
-              <span className="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-lg">
+              <span className="bg-rose-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm shadow-rose-200">
                 {discount}% OFF
               </span>
             )}
-            {product.isNew && (
-              <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-lg">
-                New
+            {product.featured && (
+              <span className="bg-yellow-400 text-gray-800 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm shadow-yellow-200">
+                Featured
               </span>
             )}
           </div>
@@ -146,7 +156,7 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
       {/* Details */}
       <div className="p-4">
         <Link to={`/products/${product.id}`}>
-          <h3 className="font-semibold text-gray-800 hover:text-indigo-600 transition line-clamp-1 text-base">
+          <h3 className="font-semibold text-gray-800 hover:text-emerald-600 transition line-clamp-1 text-base">
             {product.name}
           </h3>
         </Link>
@@ -160,7 +170,7 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
         </div>
 
         <div className="flex items-center gap-2 mt-2.5">
-          <span className="text-xl font-bold text-gray-800">
+          <span className="text-xl font-bold text-emerald-600">
             ₹{product.price?.toLocaleString()}
           </span>
           {product.originalPrice && (
@@ -170,10 +180,12 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
           )}
         </div>
 
-        <AddToCartButton 
-        productId={product.id}
-        color = {product.images?.[0]?.color || 'Default'}
-         />
+        <AddToCartButton
+          productId={product.id}
+          product={product}
+          color={product.images?.[0]?.color || "Default"}
+          className="w-full mt-3"
+        />
       </div>
     </div>
   );

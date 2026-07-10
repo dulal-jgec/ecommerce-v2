@@ -1,6 +1,6 @@
 // src/features/orders/pages/OrderHistoryPage.jsx
 import React, { useState } from 'react';
-import { Package, ShoppingBag, Search, Filter, Sparkles, TrendingUp, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Package, ShoppingBag, Search, Filter, Sparkles, TrendingUp, Clock, CheckCircle, XCircle, Truck  } from 'lucide-react';
 import { useOrders } from '../hooks/useOrders';
 import OrderCard from '../components/OrderCard';
 
@@ -8,12 +8,43 @@ const OrderHistoryPage = () => {
   const { orders, loading, page, totalPages, setPage } = useOrders();
   const [activeFilter, setActiveFilter] = useState('all');
 
-  const filters = [
-    { id: 'all', label: 'All Orders', icon: ShoppingBag },
-    { id: 'DELIVERED', label: 'Delivered', icon: CheckCircle },
-    { id: 'PROCESSING', label: 'Processing', icon: Clock },
-    { id: 'CANCELLED', label: 'Cancelled', icon: XCircle },
-  ];
+const filters = [
+  {
+    id: "all",
+    label: "All Orders",
+    icon: ShoppingBag,
+  },
+
+  {
+    id: "PLACED",
+    label: "Placed",
+    icon: Clock,
+  },
+
+  {
+    id: "PAID",
+    label: "Paid",
+    icon: Package,
+  },
+
+  {
+    id: "SHIPPED",
+    label: "Shipped",
+    icon: Truck,
+  },
+
+  {
+    id: "DELIVERED",
+    label: "Delivered",
+    icon: CheckCircle,
+  },
+
+  {
+    id: "CANCELLED",
+    label: "Cancelled",
+    icon: XCircle,
+  },
+];
 
   const filteredOrders = activeFilter === 'all' 
     ? orders 
@@ -109,7 +140,7 @@ const OrderHistoryPage = () => {
         ) : (
           <div className="space-y-4">
             {filteredOrders.map((order) => (
-              <OrderCard key={order.id} order={order} />
+              <OrderCard key={order.orderId} order={order} />
             ))}
           </div>
         )}

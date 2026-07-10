@@ -45,10 +45,14 @@ const SellersPage = () => {
 
   const loadSellers = async () => {
     setLoading(true);
+
     try {
-      const data = await getAllSellers();
-      setSellers(data);
-      setTotalPages(Math.ceil(data.length / 10));
+      const response = await getAllSellers();
+
+   
+
+      setSellers(response);
+      setTotalPages(1);
     } catch (error) {
       console.error("Error loading sellers:", error);
     } finally {
@@ -93,6 +97,7 @@ const SellersPage = () => {
     setSelectedSeller(null);
   };
 
+  // Stats based on actual data
   const stats = [
     {
       label: "Total Sellers",
@@ -120,19 +125,18 @@ const SellersPage = () => {
     },
   ];
 
+  // Filter sellers
   const filteredSellers = sellers.filter((seller) => {
     const matchesSearch =
-      (seller.storeName || seller.shopName || "")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      seller.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (seller.ownerName || "")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
       (seller.firstName || "")
         .toLowerCase()
         .includes(searchTerm.toLowerCase()) ||
-      (seller.lastName || "").toLowerCase().includes(searchTerm.toLowerCase());
+      (seller.lastName || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      seller.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      seller.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (seller.phoneNumber || "").includes(searchTerm);
 
     const sellerStatus = seller.status || "PENDING";
     const matchesStatus =
@@ -140,6 +144,7 @@ const SellersPage = () => {
     return matchesSearch && matchesStatus;
   });
 
+  //Get status badge
   const getStatusBadge = (status) => {
     const statusMap = {
       APPROVED: {
@@ -167,6 +172,108 @@ const SellersPage = () => {
         {s.label}
       </span>
     );
+  };
+
+   const getFullName = (seller) => {
+    if (!seller) return "N/A";
+
+    
+    if (
+      seller.fullName &&
+      seller.fullName.trim() !== " " &&
+      seller.fullName.trim() !== ""
+    ) {
+      return seller.fullName.trim();
+    }
+
+     const firstName = seller.firstName || "";
+    const lastName = seller.lastName || "";
+    const combined = `${firstName} ${lastName}`.trim();
+
+    return combined || "N/A";
+  };
+
+ 
+  const getInitial = (seller) => {
+    if (!seller) return "S";
+
+    if (seller.firstName && seller.firstName.length > 0) {
+      return seller.firstName.charAt(0).toUpperCase();
+    }
+
+    if (
+      seller.fullName &&
+      seller.fullName.trim() !== " " &&
+      seller.fullName.trim() !== ""
+    ) {
+      return seller.fullName.trim().charAt(0).toUpperCase();
+    }
+
+    if (seller.email && seller.email.length > 0) {
+      return seller.email.charAt(0).toUpperCase();
+    }
+
+    return "S";
+  };
+
+  // Safe modal message
+  const getModalMessage = () => {
+    if (!selectedSeller) return "No seller selected";
+
+    const name = getFullName(selectedSeller);
+    const email = selectedSeller.email || "N/A";
+    const phone = selectedSeller.phoneNumber || "N/A";
+    const role = selectedSeller.role || "SELLER";
+    const status = selectedSeller.status || "PENDING";
+
+    if (modalAction === "approve") {
+      return `Are you sure you want to approve "${name}" as a seller? They will get full access to the seller dashboard.`;
+    } else if (modalAction === "reject") {
+      return `Are you sure you want to reject "${name}" seller application? This action cannot be undone.`;
+    } else {
+      return (
+        <div className="text-left space-y-2">
+          <p>
+            <strong>Name:</strong> {name}
+          </p>
+          <p>
+            <strong>Email:</strong> {email}
+          </p>
+          <p>
+            <strong>Phone:</strong> {phone}
+          </p>
+          <p>
+            <strong>Role:</strong> {role}
+          </p>
+          <p>
+            <strong>Status:</strong> {status}
+          </p>
+        </div>
+      );
+    }
+  };
+
+  // Get modal title
+  const getModalTitle = () => {
+    if (!selectedSeller) return "Seller Details";
+
+    if (modalAction === "approve") return "Approve Seller";
+    if (modalAction === "reject") return "Reject Seller";
+    return "Seller Details";
+  };
+
+  // Get modal confirm text
+  const getModalConfirmText = () => {
+    if (modalAction === "approve") return "Approve Seller";
+    if (modalAction === "reject") return "Reject Seller";
+    return "Close";
+  };
+
+  // Get modal type
+  const getModalType = () => {
+    if (modalAction === "approve") return "success";
+    if (modalAction === "reject") return "danger";
+    return "info";
   };
 
   if (loading) {
@@ -236,7 +343,7 @@ const SellersPage = () => {
             />
             <input
               type="text"
-              placeholder="Search sellers by store name, owner, email..."
+              placeholder="Search sellers by name, email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-sm"
@@ -274,22 +381,19 @@ const SellersPage = () => {
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Seller / Store
+                  Seller
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Contact
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Products
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Revenue
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Joined
+                  Role
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Joined
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
@@ -302,18 +406,14 @@ const SellersPage = () => {
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-full flex items-center justify-center text-indigo-600 font-semibold text-sm shadow-sm">
-                        {(seller.storeName || seller.shopName || "S")
-                          .charAt(0)
-                          .toUpperCase()}
+                        {getInitial(seller)}
                       </div>
                       <div>
                         <p className="font-medium text-sm text-gray-800">
-                          {seller.storeName || seller.shopName || "N/A"}
+                          {getFullName(seller)}
                         </p>
                         <p className="text-xs text-gray-400">
-                          {seller.ownerName ||
-                            `${seller.firstName || ""} ${seller.lastName || ""}` ||
-                            "N/A"}
+                          {seller.email || "N/A"}
                         </p>
                       </div>
                     </div>
@@ -326,26 +426,23 @@ const SellersPage = () => {
                       </p>
                       <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
                         <Phone size={12} className="text-gray-400" />
-                        {seller.phone || "N/A"}
+                        {seller.phoneNumber || "N/A"}
                       </p>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 flex items-center gap-1">
-                    <Package size={14} className="text-gray-400" />
-                    {seller.products || 0}
-                  </td>
-                  <td className="px-6 py-4 font-semibold text-gray-800 flex items-center gap-1">
-                    <DollarSign size={14} className="text-emerald-500" />
-                    {seller.revenue || "₹0"}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500 flex items-center gap-1">
-                    <Calendar size={14} className="text-gray-400" />
-                    {seller.createdAt
-                      ? new Date(seller.createdAt).toLocaleDateString()
-                      : "-"}
+                  <td className="px-6 py-4">
+                    <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-purple-50 text-purple-700">
+                      {seller.role || "SELLER"}
+                    </span>
                   </td>
                   <td className="px-6 py-4">
                     {getStatusBadge(seller.status || "PENDING")}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-500 flex items-center gap-1">
+                    <Calendar size={14} className="text-gray-400" />
+                    {seller.appliedAt
+                      ? new Date(seller.appliedAt).toLocaleDateString()
+                      : "-"}
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
@@ -429,55 +526,10 @@ const SellersPage = () => {
           setSelectedSeller(null);
         }}
         onConfirm={handleConfirmAction}
-        title={
-          modalAction === "approve"
-            ? "Approve Seller"
-            : modalAction === "reject"
-              ? "Reject Seller"
-              : "Seller Details"
-        }
-        message={
-          modalAction === "approve" ? (
-            `Are you sure you want to approve "${selectedSeller?.storeName || selectedSeller?.shopName}" as a seller? They will get full access to the seller dashboard.`
-          ) : modalAction === "reject" ? (
-            `Are you sure you want to reject "${selectedSeller?.storeName || selectedSeller?.shopName}" seller application? This action cannot be undone.`
-          ) : (
-            <div className="text-left space-y-2">
-              <p>
-                <strong>Store:</strong>{" "}
-                {selectedSeller?.storeName || selectedSeller?.shopName}
-              </p>
-              <p>
-                <strong>Owner:</strong>{" "}
-                {selectedSeller?.ownerName ||
-                  `${selectedSeller?.firstName} ${selectedSeller?.lastName}`}
-              </p>
-              <p>
-                <strong>Email:</strong> {selectedSeller?.email}
-              </p>
-              <p>
-                <strong>Phone:</strong> {selectedSeller?.phone || "N/A"}
-              </p>
-              <p>
-                <strong>Status:</strong> {selectedSeller?.status || "PENDING"}
-              </p>
-            </div>
-          )
-        }
-        confirmText={
-          modalAction === "approve"
-            ? "Approve Seller"
-            : modalAction === "reject"
-              ? "Reject Seller"
-              : "Close"
-        }
-        type={
-          modalAction === "approve"
-            ? "success"
-            : modalAction === "reject"
-              ? "danger"
-              : "info"
-        }
+        title={getModalTitle()}
+        message={getModalMessage()}
+        confirmText={getModalConfirmText()}
+        type={getModalType()}
       />
     </div>
   );

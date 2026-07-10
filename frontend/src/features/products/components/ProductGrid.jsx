@@ -15,7 +15,7 @@ const ProductGrid = ({ products, loading, viewMode = "grid" }) => {
         {[...Array(8)].map((_, i) => (
           <div
             key={i}
-            className={`animate-pulse bg-white rounded-2xl border border-gray-100 ${
+            className={`animate-pulse bg-gray-100 rounded-2xl border border-gray-200 ${
               viewMode === "grid" ? "h-96" : "h-48"
             }`}
           >
@@ -29,7 +29,7 @@ const ProductGrid = ({ products, loading, viewMode = "grid" }) => {
   if (!products || products.length === 0) {
     return (
       <div className="text-center py-20">
-        <div className="text-7xl mb-4">🔍</div>
+        <div className="text-6xl mb-4">🌿</div>
         <h3 className="text-2xl font-semibold text-gray-700">No Products Found</h3>
         <p className="text-gray-400 mt-2">Try adjusting your filters</p>
       </div>

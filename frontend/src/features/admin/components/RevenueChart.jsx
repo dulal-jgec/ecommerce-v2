@@ -1,4 +1,3 @@
-// src/features/admin/components/RevenueChart.jsx
 import React, { useState, useEffect } from "react";
 import { Calendar, ChevronDown } from "lucide-react";
 import { getRevenueData } from "../services/adminService";

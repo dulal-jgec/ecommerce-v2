@@ -1,4 +1,3 @@
-// src/features/admin/components/ReportsTable.jsx
 import React from 'react';
 import { Eye, Download, Mail, Calendar, Database } from 'lucide-react';
 

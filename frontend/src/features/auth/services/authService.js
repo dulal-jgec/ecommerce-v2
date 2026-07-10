@@ -1,20 +1,19 @@
 // src/features/auth/services/authService.js
 import apiClient from '../../../shared/services/apiClient';
-import { AUTH } from '../../../shared/services/apiEndpoints';
+import { AUTH, USER } from "../../../shared/services/apiEndpoints";
 
 class AuthService {
   
   // Login
   async login(email, password) {
     try {
-      console.log('📤 Sending login request:', { email });
+      console.log('Sending login request:', { email });
       
       const response = await apiClient.post(AUTH.LOGIN, {
         email: email.trim(),
         password: password.trim()
       });
-      
-      console.log('📥 Login response:', response.data);
+     
       
       if (!response.data || !response.data.data) {
         throw new Error('Invalid response from server');
@@ -32,7 +31,7 @@ class AuthService {
         message: response.data.message || 'Login successful',
       };
     } catch (error) {
-      console.error('❌ Login error:', error);
+      console.error('Login error:', error);
       return {
         success: false,
         message: error.response?.data?.message || 'Login failed',
@@ -41,26 +40,23 @@ class AuthService {
     }
   }
 
-  // ✅ Logout - সঠিকভাবে Refresh Token পাঠান
+ 
   async logout(refreshToken) {
     try {
-      console.log('📤 Sending logout request with token:', refreshToken);
-      
-      // Logout API তে Refresh Token পাঠান
       const response = await apiClient.post(AUTH.LOGOUT, {
         refreshToken: refreshToken
       });
       
-      console.log('📥 Logout response:', response.data);
+      console.log('Logout response:', response.data);
       
       return {
         success: true,
         message: response.data?.message || 'Logged out successfully',
       };
     } catch (error) {
-      console.error('❌ Logout API error:', error);
+      console.error('Logout API error:', error);
       
-      // Error হলেও আমরা Local Token Clear করব
+      
       return {
         success: false,
         message: error.response?.data?.message || 'Logout failed',
@@ -69,7 +65,7 @@ class AuthService {
     }
   }
 
-  // Refresh Token
+ 
   async refreshToken(refreshToken) {
     try {
       const response = await apiClient.post(AUTH.REFRESH, { refreshToken });
@@ -84,6 +80,48 @@ class AuthService {
       };
     }
   }
+
+  async register(userData) {
+  try {
+    
+
+    const response = await apiClient.post(AUTH.REGISTER, userData);
+    return {
+      success: true,
+      data: response.data.data,
+      message: response.data.message,
+    };
+  } catch (error) {
+    console.error("Register error:", error);
+
+    return {
+      success: false,
+      message: error.response?.data?.message || "Registration failed",
+    };
+  }
 }
 
+async getProfile() {
+  try {
+    const response = await apiClient.get(USER.PROFILE);
+
+    return {
+      success: true,
+      data: response.data.data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error.response?.data?.message || "Failed to fetch profile",
+    };
+  }
+}
+}
+
+
+
+
 export const authService = new AuthService();
+
+

@@ -1,21 +1,28 @@
-// src/features/seller/components/RecentOrdersTable.jsx
-import React from 'react';
-import { Eye, Truck, Check, Clock, X } from 'lucide-react';
+import React from "react";
+import { Eye, Truck, Check, Clock, X } from "lucide-react";
 
-const RecentOrdersTable = () => {
-  const orders = [
-    { id: '#ORD-001', customer: 'Rahul Sharma', items: 3, total: 2499, status: 'delivered', date: '25 Jun 2025' },
-    { id: '#ORD-002', customer: 'Priya Patel', items: 2, total: 1899, status: 'shipped', date: '24 Jun 2025' },
-    { id: '#ORD-003', customer: 'Amit Kumar', items: 5, total: 4599, status: 'processing', date: '23 Jun 2025' },
-    { id: '#ORD-004', customer: 'Sneha Reddy', items: 1, total: 599, status: 'pending', date: '23 Jun 2025' },
-  ];
-
+const RecentOrdersTable = ({ orders = [] }) => {
   const statusConfig = {
-    delivered: { icon: Check, color: 'bg-emerald-100 text-emerald-700' },
-    shipped: { icon: Truck, color: 'bg-blue-100 text-blue-700' },
-    processing: { icon: Clock, color: 'bg-yellow-100 text-yellow-700' },
-    pending: { icon: Clock, color: 'bg-orange-100 text-orange-700' },
-    cancelled: { icon: X, color: 'bg-red-100 text-red-700' },
+    DELIVERED: {
+      icon: Check,
+      color: "bg-emerald-100 text-emerald-700",
+    },
+    SHIPPED: {
+      icon: Truck,
+      color: "bg-blue-100 text-blue-700",
+    },
+    PROCESSING: {
+      icon: Clock,
+      color: "bg-yellow-100 text-yellow-700",
+    },
+    PAID: {
+      icon: Clock,
+      color: "bg-orange-100 text-orange-700",
+    },
+    CANCELLED: {
+      icon: X,
+      color: "bg-red-100 text-red-700",
+    },
   };
 
   return (
@@ -25,7 +32,8 @@ const RecentOrdersTable = () => {
           <h3 className="font-semibold text-gray-800">Recent Orders</h3>
           <p className="text-sm text-gray-400">Latest customer orders</p>
         </div>
-        <button className="text-sm text-emerald-600 font-medium hover:text-emerald-700 transition">
+
+        <button className="text-sm text-emerald-600 font-medium hover:text-emerald-700">
           View All →
         </button>
       </div>
@@ -33,41 +41,95 @@ const RecentOrdersTable = () => {
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="text-left text-xs font-medium text-gray-400 uppercase tracking-wider border-b border-gray-100">
+            <tr className="border-b border-gray-100 text-left text-xs uppercase text-gray-500">
               <th className="pb-3">Order ID</th>
               <th className="pb-3">Customer</th>
-              <th className="pb-3">Items</th>
+              <th className="pb-3">Product</th>
+              <th className="pb-3">Qty</th>
               <th className="pb-3">Total</th>
               <th className="pb-3">Status</th>
-              <th className="pb-3">Date</th>
               <th className="pb-3 text-right">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
-            {orders.map((order) => {
-              const StatusIcon = statusConfig[order.status]?.icon || Clock;
-              const statusColor = statusConfig[order.status]?.color || 'bg-gray-100 text-gray-700';
-              return (
-                <tr key={order.id} className="hover:bg-gray-50/50 transition">
-                  <td className="py-3 text-sm font-medium text-emerald-600">{order.id}</td>
-                  <td className="py-3 text-sm text-gray-700">{order.customer}</td>
-                  <td className="py-3 text-sm text-gray-600">{order.items}</td>
-                  <td className="py-3 font-semibold text-gray-800">₹{order.total.toLocaleString()}</td>
-                  <td className="py-3">
-                    <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full ${statusColor}`}>
-                      <StatusIcon size={12} />
-                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                    </span>
-                  </td>
-                  <td className="py-3 text-sm text-gray-500">{order.date}</td>
-                  <td className="py-3 text-right">
-                    <button className="p-1.5 hover:bg-gray-100 rounded-lg transition text-gray-400 hover:text-emerald-600">
-                      <Eye size={16} />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+
+          <tbody className="divide-y divide-gray-100">
+            {orders.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="text-center py-10 text-gray-500">
+                  No Orders Found
+                </td>
+              </tr>
+            ) : (
+              orders.map((order) => {
+                const StatusIcon = statusConfig[currentStatus]?.icon || Clock;
+
+                const statusColor =
+                  statusConfig[currentStatus]?.color ||
+                  "bg-gray-100 text-gray-700";
+
+                return (
+                  <tr
+                    key={order.orderItemId}
+                    className="hover:bg-gray-50 transition"
+                  >
+                    <td className="py-4 font-semibold text-emerald-600">
+                      #{order.orderId}
+                    </td>
+
+                    <td className="py-4">
+                      <div>
+                        <p className="font-medium text-gray-800">
+                          {order.customerName}
+                        </p>
+
+                        <p className="text-xs text-gray-500">
+                          {order.customerPhone}
+                        </p>
+                      </div>
+                    </td>
+
+                    <td className="py-4">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={order.imageUrl}
+                          alt={order.productName}
+                          className="w-12 h-12 rounded-lg object-cover border"
+                        />
+
+                        <div>
+                          <p className="font-medium text-gray-800">
+                            {order.productName}
+                          </p>
+
+                          <p className="text-xs text-gray-500">{order.color}</p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="py-4">{order.quantity}</td>
+
+                    <td className="py-4 font-semibold">
+                      ₹{(order.price * order.quantity).toLocaleString()}
+                    </td>
+
+                    <td className="py-4">
+                      <span
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${statusColor}`}
+                      >
+                        <StatusIcon size={12} />
+                        <OrderStatusBadge status={currentStatus} />
+                      </span>
+                    </td>
+
+                    <td className="py-4 text-right">
+                      <button className="p-2 rounded-lg hover:bg-gray-100">
+                        <Eye size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>

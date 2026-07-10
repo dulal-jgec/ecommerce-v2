@@ -1,35 +1,35 @@
 // src/features/products/components/ProductSort.jsx
+import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
 
 const ProductSort = ({ sortBy, setSortBy }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const options = [
-    { value: "", label: "Sort By" },
-    { value: "price-asc", label: "Price: Low to High" },
-    { value: "price-desc", label: "Price: High to Low" },
     { value: "name-asc", label: "Name: A to Z" },
     { value: "name-desc", label: "Name: Z to A" },
+    { value: "newest", label: "Newest First" },
+    { value: "price-asc", label: "Price: Low to High" },
+    { value: "price-desc", label: "Price: High to Low" },
+    { value: "rating", label: "Best Rating" },
+    { value: "popularity", label: "Popularity" },
+    { value: "discount", label: "Highest Discount" },
   ];
 
-  const currentLabel = options.find((o) => o.value === sortBy)?.label || "Sort By";
+  const currentLabel = options.find((o) => o.value === sortBy)?.label || "Name: A to Z";
 
   return (
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-100 transition min-w-[160px] justify-between"
+        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition min-w-[140px] justify-between"
       >
-        <span className="text-gray-700">{currentLabel}</span>
-        <ChevronDown
-          size={16}
-          className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
-        />
+        <span className="text-gray-700 truncate">{currentLabel}</span>
+        <ChevronDown size={16} className={`text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-10">
+        <div className="absolute left-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-10">
           {options.map((option) => (
             <button
               key={option.value}
@@ -37,10 +37,10 @@ const ProductSort = ({ sortBy, setSortBy }) => {
                 setSortBy(option.value);
                 setIsOpen(false);
               }}
-              className={`block w-full text-left px-4 py-2.5 text-sm hover:bg-indigo-50 transition ${
+              className={`block w-full text-left px-4 py-2.5 text-sm transition ${
                 sortBy === option.value
-                  ? "text-indigo-600 font-medium bg-indigo-50"
-                  : "text-gray-700"
+                  ? "bg-emerald-50 text-emerald-700 font-medium"
+                  : "text-gray-600 hover:bg-gray-50"
               }`}
             >
               {option.label}

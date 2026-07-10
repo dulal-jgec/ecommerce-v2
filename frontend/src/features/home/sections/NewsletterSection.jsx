@@ -4,10 +4,10 @@ import { Send } from 'lucide-react';
 
 const NewsletterSection = () => {
   return (
-    <section className="py-12 bg-white">
+    <section className="py-12 bg-gray-50">
       <div className="max-w-3xl mx-auto px-4 text-center">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          📬 Stay in the Loop
+          Stay in the Loop
         </h2>
         <p className="text-gray-500 mb-6">
           Get exclusive deals, new arrivals and tech updates delivered to your inbox.
@@ -16,9 +16,9 @@ const NewsletterSection = () => {
           <input
             type="email"
             placeholder="Your email address"
-            className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-full focus:ring-2 focus:ring-blue-400 outline-none transition"
+            className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-full focus:ring-2 focus:ring-emerald-400 outline-none transition"
           />
-          <button className="px-6 py-3 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2">
+          <button className="px-6 py-3 bg-emerald-600 text-white rounded-full font-medium hover:bg-emerald-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-sm shadow-emerald-200">
             <Send size={18} />
             Subscribe
           </button>
