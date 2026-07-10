@@ -24,14 +24,19 @@ export const getDashboardStats = async () => {
         (sum, order) => sum + order.price * order.quantity,
         0
       ),
-      pendingOrders: orders.filter(
-        order =>
-          currentStatus === "PAID" ||
-          currentStatus === "PROCESSING"
-      ).length,
-      deliveredOrders: orders.filter(
-        order => currentStatus === "DELIVERED"
-      ).length,
+ pendingOrders: orders.filter(
+  order =>
+    order.status === "PLACED" ||
+    order.status === "PAID"
+).length,
+
+deliveredOrders: orders.filter(
+  order => order.status === "DELIVERED"
+).length,
+
+deliveredOrders: orders.filter(
+  order => order.status === "DELIVERED"
+).length,
       recentOrders: orders.slice(0, 5),
     };
   } catch (error) {
