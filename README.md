@@ -1,321 +1,219 @@
-# 🛒 E-Commerce Platform
+# 🛍️ ShopLy - Full Stack E-Commerce Platform
 
-A full-stack E-Commerce Platform built using **Spring Boot**, **React**, and **MySQL** following a feature-based architecture.
+Built as a personal learning project to gain hands-on experience in designing and developing a scalable full-stack e-commerce platform using modern web technologies. This project is continuously evolving with new features, performance improvements, and UI enhancements.
 
-This project is being developed as a production-oriented learning project with a strong focus on backend design, security, scalability, and real-world business workflows.
+A modern full-stack e-commerce web application built with **React.js**, **Spring Boot**, and **MySQL**.
 
-> 🚧 Project Status: In Active Development
+ShopLy provides a complete online shopping experience where customers can browse products, place orders, make secure payments, sellers can manage products and orders, and administrators can manage the entire platform through a dedicated dashboard.
 
----
-
-## ✨ Current Features
-
-### Authentication & Authorization
-
-- User Registration
-- User Login
-- JWT Authentication
-- Refresh Token Mechanism
-- Logout Functionality
-- Role-Based Access Control (RBAC)
-
-Roles:
-
-- BUYER
-- SELLER
-- ADMIN
+> 🚧 **Project Status:** This project is actively under development. New features, UI improvements, and optimizations are continuously being added.
 
 ---
 
-### Product Management
+# 🚀 Live Demo
 
-- Create Product
-- Update Product
-- Delete Product
-- Product Details
-- Product Listing
+### 🌐 Frontend
+https://ecommerce-v2-orpin.vercel.app
+
+### ⚙️ Backend API
+https://ecommerce-v2-backend-g92n.onrender.com
+
+---
+
+# ✨ Features
+
+## 👤 Customer
+
+- User Registration & Login (JWT Authentication)
+- Browse Products
 - Product Search
-- Product Filtering
-- Product Sorting
-
-Product Tags:
-
-- Featured Products
-- New Arrivals
-- Best Sellers
-- Trending Products
-
----
-
-### Cart System
-
-- Add To Cart
-- Remove From Cart
-- Update Quantity
-- Cart Total Calculation
-
----
-
-### Order Management
-
-- Place Order
-- Order Details
-- Order Tracking
+- Category Filtering
+- Product Details
+- Shopping Cart
+- Checkout
+- Address Management
+- Razorpay Payment Integration
+- Order Placement
 - Order History
-- Order Status Updates
+- Order Tracking
+- Cancel Order
+- Profile Management
+- Responsive UI
 
-Order Status:
+## 🛍 Seller
 
-- PLACED
-- PAID
-- SHIPPED
-- DELIVERED
-- CANCELLED
+- Seller Dashboard
+- Add Products
+- Edit Products
+- Delete Products
+- Upload Product Images
+- Manage Orders
+- Update Order Status
+- View Order Details
+- Analytics Overview
 
----
+## 👨‍💼 Admin
 
-### Address Management
-
-Users can:
-
-- Add Address
-- Update Address
-- Delete Address
-- Set Default Address
-
-Shipping information is stored as an order snapshot to preserve historical order data.
-
----
-
-### Seller Module
-
-Implemented:
-
-- Seller Registration Flow
-- Seller Profile
-- Seller Approval Workflow
-- Seller Status
-
-Seller Status:
-
-- PENDING
-- APPROVED
-- REJECTED
-
-Admin can:
-
-- View Seller Applications
-- Approve Sellers
-- Reject Sellers
-
----
-
-### Admin Module
-
-Implemented:
-
+- Dashboard
+- User Management
+- Seller Management
 - Product Management
+- Category Management
+- Banner Management
 - Order Management
-- Seller Approval Management
+- Revenue Overview
+- Reports
 
 ---
 
-### Frontend Features
-
-Built using React:
-
-- Responsive Homepage
-- Product Carousel
-- Product Details Page
-- Cart Page
-- Checkout Page
-- Login Page
-- Registration Page
-- Seller Dashboard Structure
-- Admin Dashboard Structure
-
----
-
-## 🏗️ Backend Architecture
-
-Feature-Based Architecture:
-
-```
-features
-├── auth
-├── user
-├── product
-├── cart
-├── order
-├── address
-├── seller
-├── review
-└── payment
-```
-
-Benefits:
-
-- Scalable
-- Maintainable
-- Easy to extend
-- Suitable for large projects
-
----
-
-## 🔐 Security Features
-
-- Spring Security
-- JWT Authentication
-- Refresh Tokens
-- Password Encryption (BCrypt)
-- Role-Based Authorization
-- Input Validation
-
----
-
-## 🛠️ Tech Stack
-
-### Backend
-
-- Java 21
-- Spring Boot
-- Spring Security
-- Spring Data JPA
-- Hibernate
-- MySQL
-- Lombok
-- JWT
+# 🛠 Tech Stack
 
 ### Frontend
 
-- React
-- React Router
+- React.js
+- React Router DOM
+- Redux Toolkit
 - Axios
 - Tailwind CSS
 - Lucide React
 
-### Database
-
-- MySQL
-
-### Tools
-
-- Git
-- GitHub
-- Postman
-- Maven
-
----
-
-## 📂 Project Structure
-
 ### Backend
 
-```
-backend
-├── config
-├── common
-├── features
-│   ├── auth
-│   ├── user
-│   ├── product
-│   ├── cart
-│   ├── order
-│   ├── address
-│   └── seller
-```
+- Java
+- Spring Boot
+- Spring Security
+- JWT Authentication
+- Spring Data JPA
+- Hibernate
 
-### Frontend
+### Database
 
-```
-src
-├── admin
-├── customer
-├── seller
-├── services
-├── context
-├── pages
-└── assets
-```
+- MySQL (Railway)
+
+### Cloud & Deployment
+
+- Vercel
+- Render
+- Railway
+- Cloudinary
+
+### Payment Gateway
+
+- Razorpay
 
 ---
 
-## 🚀 Future Enhancements
+# 🔐 Authentication & Authorization
 
-Planned Features:
-
-- Payment Gateway Integration
-- Product Reviews & Ratings
-- Wishlist
-- Inventory Management
-- Seller Analytics Dashboard
-- Revenue Reports
-- Product Image Upload to Cloud Storage
-- Email Notifications
-- Admin Analytics
-- Advanced Search
-- Product Recommendations
-- Coupon System
-- Returns & Refund Workflow
-- Docker Support
-- CI/CD Pipeline
-- Monitoring & Logging
-- Microservice Migration (Future Exploration)
+- JWT Authentication
+- Role Based Access Control (RBAC)
+- Customer
+- Seller
+- Admin
 
 ---
 
-## 🎯 Learning Goals
-
-This project is being built to gain hands-on experience with:
-
-- Enterprise Backend Development
-- Secure Authentication Systems
-- REST API Design
-- Database Design
-- Role-Based Authorization
-- Full-Stack Development
-- Software Architecture
-- Real-World E-Commerce Workflows
-
----
-
-## 📌 Project Status
-
-Current Version:
-
-```
-MVP + Seller Workflow Implemented
-```
-
-Completed:
+# 📦 Modules
 
 - Authentication
-- Products
+- Product Management
+- Category Management
 - Cart
+- Checkout
+- Payments
 - Orders
-- Addresses
-- Seller Approval System
-- Admin Panel
-
-In Progress:
-
-- Seller Product Ownership
-- Seller Order Management
-- Dashboard Analytics
-- UI Improvements
-- Payment Integration
+- Reviews
+- Seller Dashboard
+- Admin Dashboard
+- Banner Management
 
 ---
 
-## 👨‍💻 Author
+# 🌟 Highlights
 
-**Sk Dulal Islam**
+- Full Stack Architecture
+- RESTful APIs
+- Secure Authentication
+- Role Based Authorization
+- Responsive UI
+- Reusable Components
+- Clean Folder Structure
+- Cloud Image Upload
+- Payment Gateway Integration
 
-B.Tech Information Technology  
+---
+
+# 🚧 Upcoming Improvements
+
+Some features are currently being planned and will be implemented in future updates.
+
+- Wishlist
+- Coupons & Discounts
+- Product Recommendations
+- Email Notifications
+- Better Analytics Dashboard
+- Notification System
+- Performance Optimization
+- More UI Animations
+- Better Mobile Experience
+- Unit & Integration Testing
+- More security imp
+
+---
+
+# 💻 Run Locally
+
+## Frontend
+
+```bash
+npm install
+npm run dev
+```
+
+## Backend
+
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+---
+
+# 🔑 Environment Variables
+
+Backend requires the following environment variables:
+
+```env
+SPRING_DATASOURCE_URL
+SPRING_DATASOURCE_USERNAME
+SPRING_DATASOURCE_PASSWORD
+
+JWT_SECRET
+
+RAZORPAY_KEY_ID
+RAZORPAY_KEY_SECRET
+
+CLOUDINARY_CLOUD_NAME
+CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET
+```
+
+---
+
+# 📈 Project Status
+
+This project is actively being developed as a learning project. New features, code refactoring, performance improvements, and UI enhancements are continuously being added.
+
+---
+
+# 👨‍💻 Author
+
+**SK Dulal Islam**
+
+B.Tech in Information Technology
+
 Jalpaiguri Government Engineering College
 
-Building this project to learn production-grade full-stack development and software engineering principles.
-
 ---
 
-⭐ If you like this project, feel free to star the repository.
+⭐ If you like this project, feel free to give it a star.
