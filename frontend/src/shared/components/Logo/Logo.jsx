@@ -1,6 +1,7 @@
 // src/shared/components/Logo/Logo.jsx
 import React from "react";
 import { Link } from "react-router-dom";
+import logo from "../../../assets/logos/logo.png"
 
 const Logo = ({ className = "", size = "md" }) => {
   const sizeClasses = {
@@ -13,7 +14,7 @@ const Logo = ({ className = "", size = "md" }) => {
   return (
     <Link to="/" className={`flex items-center ${className}`}>
       <img
-        src="/src/assets/logos/logo.png"
+        src={logo}
         alt="ShopLy"
         className={`${sizeClasses[size]} object-contain select-none`}
         draggable="false"
